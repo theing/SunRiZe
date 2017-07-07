@@ -1,5 +1,6 @@
 
-SunRiZe is a simplified Model Driven Development software, generating C code for micro platforms, like Arduino.
+SunRiZe is a simplified Model Driven Development software, used to generate C code 
+for micro platforms, like Arduino.
 
 SunRiZe is written in pure C++-1x with wxWidget and embedded python scripting.
 
@@ -28,9 +29,9 @@ SunRiZe
 
 That is the standalone program folder you can move everywhere.
 
-from there, run SunRiZe and enjoy !
+from there, run SunRiZe and enjoy.
 
-Marco
+Good luck, Marco
 
 
 
