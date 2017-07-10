@@ -4,9 +4,11 @@ for micro platforms, like Arduino.
 
 SunRiZe is written in pure C++-1x with wxWidget and embedded python scripting.
 
-The current version of SunRiZe can be compile on Linux only, my system is a Debian Stretch.
+SunRiZe has been developed on Linux with the mind to be portable.
 
-I'm working to a porting for Windows, python 3 support (and documentation).
+
+Compiling On Linux
+==================
 
 SunRiZe requires :
 wxWidgets (development) 3.0 or greater
@@ -31,7 +33,18 @@ That is the standalone program folder you can move everywhere.
 
 from there, run SunRiZe and enjoy.
 
-Good luck, Marco
 
+
+Compiling on Windows (new)
+==========================
+
+There is a specific build for Windows.
+Look in Build, at the file "HowToCompile.rtf"
+
+
+
+I'm working to the tool documentation.
+
+Good luck, Marco
 
 
