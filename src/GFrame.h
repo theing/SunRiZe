@@ -73,7 +73,6 @@ class GFrame : public MyFrame1
   int indexer;
   static Factory * factory;
   String projectPath;
-  String currentPath;
   GFrame( wxWindow* parent );  
 
 protected:

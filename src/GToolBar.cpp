@@ -88,5 +88,6 @@ void GToolBar::clearSelection()
     int i=iter.first;
     toolBar->ToggleTool(i,false);    
   }
+  selectedItem = -1;
   selection=nullptr;
 }

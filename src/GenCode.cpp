@@ -54,7 +54,7 @@ GenCode::GenCode()
   startprefix="//+";
   endprefix="//-";
   Py_SetProgramName((char*)"GenCode");
-  Py_Initialize();  
+  Py_Initialize();
   Py_InitModule("gc", methods);
 }
 
@@ -69,15 +69,28 @@ GenCode::~GenCode()
 bool GenCode::generateCode(Var &v)
 {  
   model=&v;
-  String file=Glob::resPath()+"GenCode.py";
-	FILE *fp = fopen(file.c_str(), "r");
-  if (fp==NULL) return false;
+  String file=Glob::resPath()+"GenCode.pcg";
   SPyObject model(PyDict_New());
-  PyDict_SetItemString(model,"model",varToPython(v)); 
-  onError=false;
-	if (!PyRun_SimpleFile(fp, "gc.py")) PyErr_Print();
+  //PyDict_SetItemString(model, "model", varToPython(v));
+  onError = false;
+
+  String script;
+  try
+  {
+    script = Text::readFile(file);
+  }
+  catch (Exception &e)
+  {
+    String s = "GenCode fails with error : ";
+    s+=e.what();
+    MBox::error(s);
+    return false;
+  }
+  if (PyRun_SimpleString(script.c_str())) {
+    MBox::error("The script has returned an internal error");
+  }
   if (onError) return false;
-  fclose(fp);
+  
   return true;
 }
 
@@ -264,13 +277,15 @@ PyObject* GenCode::prefixes(PyObject* self, PyObject* args)
 
 void GenCode::preserveCode(String & name)
 {
-  std::ifstream inFile;
-  inFile.open(name);
-  if (inFile.fail()) return;
-  std::stringstream buffer;
-  buffer << inFile.rdbuf();
-  inFile.close();
-  oldFile=Text::split(buffer.str(),"\n");
+  String text;
+  try {
+    text = Text::readFile(name);
+  }
+  catch (Exception &e)
+  {
+    return;
+  }
+  oldFile=Text::split(text,"\n");
   String currentkey="";
   for (String &s : oldFile)
   {
@@ -300,25 +315,55 @@ void GenCode::preserveCode(String & name)
 void GenCode::writeFiles()
 {
     for (auto & fs  : files)
-    {    
-      preserveCode(fs.second.name);
+    { 
+#ifdef WINDOWS_PORTING
+      // In order to maintain a single script we use the "posix" folder conventions, so in windows, we need
+      // to change all the slashes with backslashes
+      String realName = Text::replace(fs.second.name, "/", "\\");
+#else // I suppse this is always valid if it is not windows
+      String realName = fs.second.name;
+#endif
+      bool fileExists = Glob::fileExists(realName);
+      if (fileExists) preserveCode(realName);
       std::ofstream outFile;           
       Vector<String> fill;
       auto keyfind=fs.second.lines.find("");
       if (keyfind!=fs.second.lines.end())
       {    
         forward(0,fill,fs.second,(*keyfind).second);
-        if (fill==oldFile) continue; // The files matches, we don't need to overwrite
-        // Ok, preserve the old file with a backup sign
-        String backup=fs.second.name+"~";
-        rename (fs.second.name.c_str(), backup.c_str());
-        outFile.open(fs.second.name);  
-        if (outFile.fail()) continue;
+        if (fileExists)
+        {
+          if (fill==oldFile) continue; // The files matches, we don't need to overwrite
+          if (!Glob::makeBackup(realName)) {
+            String err = "Failed to create a backup of ";
+            err += realName;
+            err += " , aborted !";
+            MBox::error(err);
+            return;
+          }
+        }
+        else
+        {
+          Glob::makePath(realName);
+        }
+        String join;         
         for(String & s : fill)
         {
-          outFile << s << "\n";          
+          join += s;
+          join += "\n";
         }
-        outFile.close();        
+        try 
+        {
+          Text::writeFile(realName, join);
+        }
+        catch (Exception &e)
+        {
+          String err = "Failed to save ";
+          err += realName;
+          err += " , aborted !";
+          MBox::error(err);
+          return;
+        }
       }
     }
 }

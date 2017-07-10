@@ -43,8 +43,9 @@ class GPanel
 {
 
   friend class GFrame;
-  GPanel();
+  GPanel(wxScrolledWindow * ctrl);
   
+  wxScrolledWindow * ctrl;
   GContext mainContext;
   GContext * currentContext;  
   Point oldPoint;
@@ -55,7 +56,7 @@ public:
    * @brief Sent by the wx system, and used to redraw this panel.
    * @param dc the Panel device context
    */
-  void draw(wxDC & dc);
+  void draw();
   /**
    * @brief Sets the current context to a specific one.
    * This also redraws the context to the new one.

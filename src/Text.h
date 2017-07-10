@@ -69,33 +69,7 @@
      * @param _chr the character set.
      */
     static String trimLeft( String _str, String _chr );
-    /**
-     * @brief Convert a string to uppercase
-     * @param _str the string to be update to uppercase
-     */
-    static String upper( String _str );
-    /**
-     * @brief Convert a string to lowercase
-     * @param _str the string to be update to lowercase
-     */
-    static String lower( String _str );
-    /**
-     * @brief Read a string from an input stream
-     * @param is the reference to the input stream
-     * @return The read string.
-     * This function reads a bunch of characters from the input stream until a '\n'is found.
-     * The "\n" is not put into the string.
-     * For compatibility reasons the '\r' character is always skipped.
-     */
-    static String format( const char * _fmt,  ... );
-    /**
-     * @brief scan is the advanced form of a sscanf function, working with stl strings
-     * @param _data is the string to scan
-     * @param _fmt the format in sscanf style
-     * @param ... the list of sscanf like arguments
-     * @return as sscanf tradition it returns the number of arguments successfully converted.
-     */
-    static int scan( String &_data, const char * _fmt,  ... );
+    
     /**
      * @brief padLeft is the left fill function.
      * If you need to create a string of a fixed size, you can use padleft to fill on the left a string with
@@ -118,6 +92,21 @@
      * @note if the input string is greather of the number of chars, it is returned untouched.
      */
     static String padRight(String _str,char c,unsigned min);
+
+    /**
+     * @brief Read and entire file into a string
+     * @param _name The File name
+     * @return The string with the content of the file
+     * @note on IO errors throws an OSException()
+     */
+    static String readFile(String _name);
+
+    /**
+    * @brief write a string in a file
+    * @param _name The File name
+    * @note on IO errors throws an OSException()
+    */
+    static void writeFile(String _name, String _content);
 
   };
 

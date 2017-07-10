@@ -27,11 +27,12 @@
  * COMMONS definition and codestyles used into the project
  */
 
+#include "OSPorting.h"
 
+#define VERSION_STRING "0.1.170708"
+#define VERSION_NUMBER 2
 
 #include <stdint.h>
-
-
 #include <string>
 #include <vector>
 #include <list>
@@ -70,10 +71,11 @@
 #include <wx/font.h>
 #include <math.h>
 
-#include "Exception.h"
+#include "_Exception.h"
 
 #define VMIN(x,y) ((x<y) ? x : y)
 #define VMAX(x,y) ((x>y) ? x : y)
+
 
 
 typedef std::string String;

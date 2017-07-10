@@ -22,7 +22,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <unistd.h>
 #include "GFrame.h"
 #include "GDrawHelper.h"
 #include "Factory.h"
@@ -32,12 +31,24 @@
 #include "Glob.h"
 #include "Icon.xpm"
 #include "AboutBox.h"
+#include <wx/dcmemory.h>
+#include "Text.h"
+
+#ifdef LINUX_PORTING
+#include <unistd.h>
+#endif
+
+#ifdef WINDOWS_PORTING
+#define PATH_MAX MAX_PATH
+#endif
+
 
 GFrame * GFrame::instance = nullptr;
 
+
 GFrame::GFrame( wxWindow* parent )
 :
-MyFrame1( parent ),toolBar(this,m_toolBar1),selector(primaryList)
+MyFrame1( parent ),toolBar(this,m_toolBar1),panel(m_panel2),selector(primaryList)
 {
   // The factory must be initialized before the others
   SetIcon(Icon_xpm);
@@ -51,9 +62,8 @@ MyFrame1( parent ),toolBar(this,m_toolBar1),selector(primaryList)
   menuFile->Enable(menuFile->FindItem (wxT("Save")),false);
   menuFile->Enable(menuFile->FindItem (wxT("Reload")),false);
   menuGenerate->Enable(menuGenerate->FindItem (wxT("Generate Code")),false);
-  char path[PATH_MAX];
-  getcwd(path,PATH_MAX);
-  currentPath=path;
+  m_toolBar1->Enable(false);
+  changed = false;
 }
 
 void GFrame::toolClicked( wxCommandEvent& event )
@@ -63,7 +73,7 @@ void GFrame::toolClicked( wxCommandEvent& event )
 
 void GFrame::refreshDraw()
 {
-  m_panel2->Refresh();
+  m_panel2->Refresh(false);
 }
 
 void GFrame::panelKeyDown(wxKeyEvent& event)
@@ -81,22 +91,26 @@ void GFrame::panelMouseEvent(wxMouseEvent& event)
   m_panel2->SetFocus();
   if (event.ButtonDown(wxMOUSE_BTN_LEFT)) {
     wxClientDC dc(m_panel2);
-    Point p=event.GetLogicalPosition(dc);
+	m_panel2->PrepareDC(dc);
+	Point p=event.GetLogicalPosition(dc);
     panel.mouseDown(p);
   }
   else if (event.ButtonDClick(wxMOUSE_BTN_LEFT)) {
     wxClientDC dc(m_panel2);
-    Point p=event.GetLogicalPosition(dc);
+	m_panel2->PrepareDC(dc);
+	Point p=event.GetLogicalPosition(dc);
     panel.mouseDoubleClick(p);
   }
   else if (event.ButtonUp(wxMOUSE_BTN_LEFT)) {
     wxClientDC dc(m_panel2);
+	m_panel2->PrepareDC(dc);
     Point p=event.GetLogicalPosition(dc);
     panel.mouseUp(p);
   }
   else if (event.Dragging()) {
     wxClientDC dc(m_panel2);
-    Point p=event.GetLogicalPosition(dc);
+	m_panel2->PrepareDC(dc);
+	Point p=event.GetLogicalPosition(dc);
     panel.mouseDrag(p);
   }
 
@@ -105,8 +119,7 @@ void GFrame::panelMouseEvent(wxMouseEvent& event)
   
 void GFrame::panelPaintEvent( wxPaintEvent& event )
 {
-  wxClientDC dc(m_panel2);
-  panel.draw(dc);
+  panel.draw();
 }
 
 void GFrame::itemSelected(wxCommandEvent& event)
@@ -118,48 +131,69 @@ void GFrame::saveMenuSelection(wxCommandEvent& event)
 {
   clearIndexer();
   Var v=panel.getMainContext().collect(true);
-  std::ofstream outFile;
-  outFile.open(Glob::composePath(projectPath,"model.json"));  
-  outFile << JSONParser::toString(v);
-  outFile.close();
-  if (outFile.fail())
+  String realPath = Glob::composePath(projectPath, "model.srz");
+  try 
   {
-    MBox::error("Write error");
+    if (!Glob::makeBackup(realPath)) {
+      if (!MBox::yesno("Cannot make a backup of the old model, continue ?"))
+      {
+        return;
+      }
+    }
+    Text::writeFile(realPath, JSONParser::toString(v));
+  } 
+  catch (Exception & e)
+  {
+    String s = "Error saving the model : ";
+    s += e.what();
+    MBox::error(s);
   }
   menuFile->Enable(menuFile->FindItem (wxT("Reload")),true);
   menuFile->Enable(menuFile->FindItem (wxT("Save")),false);
+  m_toolBar1->Enable(true);
   changed=false;
 }
 
 
 void GFrame::reloadMenuSelection(wxCommandEvent& event)
 {  
-  std::ifstream inFile;
-  JSONParser json;
-  inFile.open(Glob::composePath(projectPath,"model.json"));
-  std::stringstream buffer;
-  buffer << inFile.rdbuf();
-  inFile.close();
-  if (inFile.fail())
+  String realPath = Glob::composePath(projectPath, "model.srz");
+  if (!Glob::fileExists(realPath))
   {
-    MBox::error("Read error");
+    MBox::error("A previous saved model does not exists.");
     return;
   }
-  Var v;
+
+  if (!MBox::yesno("WARNING: this operation will destroy the unsaved model\nto reload the previous version.\nAre you sure to proceed ?"))
+  {
+    return;
+  }
+
   try {
-  v = json.fromString(buffer.str());
-  } 
-  catch(std::exception &e) 
-  {    
-    MBox::error("Bad model");
+    String content=Text::readFile(realPath);
+    JSONParser json;
+    Var v;
+    try {
+      v = json.fromString(content);
+      if (!(v.isArray())) throw std::exception();
+    }
+    catch (std::exception &e)
+    {
+      MBox::error("The old model is not valid");
+      return;
+    }
+    // Destroy and do
+    panel.getMainContext().loadCollection(v);
+    refreshDraw();
+    selector.refresh();
+    changed = false;
+    menuFile->Enable(menuFile->FindItem(wxT("Save")), false);
+  }
+  catch (Exception &e)
+  {
+    MBox::error("Cannot read the previous model.");
     return;
   }
-  if (!(v.isArray())) return;
-  panel.getMainContext().loadCollection(v);
-  refreshDraw();
-  selector.refresh();
-  changed=false;
-  menuFile->Enable(menuFile->FindItem (wxT("Save")),false);
 }
 
 
@@ -175,7 +209,7 @@ void GFrame::generateOnMenuSelection(wxCommandEvent& event)
 
 void GFrame::projectOnMenuSelection(wxCommandEvent& event)
 {
-  projectPath=MBox::projectDialog();
+	projectPath=MBox::projectDialog();
   if (projectPath!="")
   {
     // Check the existence of the model
@@ -184,19 +218,35 @@ void GFrame::projectOnMenuSelection(wxCommandEvent& event)
       MBox::error("Cannot access this folder");
       return;
     }
-    if (Glob::fileExists(Glob::composePath(projectPath,"model.json")))
+    String realPath = Glob::composePath(projectPath, "model.srz");
+    if (Glob::fileExists(realPath))
     {
-      wxCommandEvent event; // fake
-      reloadMenuSelection(event);
+      String content = Text::readFile(realPath);
+      JSONParser json;
+      Var v;
+      try {
+        v = json.fromString(content);
+        if (!(v.isArray())) throw std::exception();
+      }
+      catch (std::exception &e)
+      {
+        MBox::error("The old model is not valid");
+        return;
+      }
+      panel.getMainContext().loadCollection(v);
+      refreshDraw();
       menuFile->Enable(menuFile->FindItem (wxT("Reload")),true);
     }
     else
     {
       bool yesno=MBox::yesno("The model file does not exists into the specified path, do you want to create a new one ?");
-      if (!yesno) return;
-      menuFile->Enable(menuFile->FindItem (wxT("Save")),true);
+	    if (!yesno) {
+		    return;
+	    }
+      menuFile->Enable(menuFile->FindItem(wxT("Save")),true);
     }
     menuGenerate->Enable(menuGenerate->FindItem (wxT("Generate Code")),true);   
+  	m_toolBar1->Enable(true);
   }
 }
 

@@ -8,5 +8,5 @@ execute_process(
     COMMAND mkdir ${CMAKE_SOURCE_DIR}/bin 
 )
 execute_process(
-    COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZeGenCode/gc.py ${CMAKE_SOURCE_DIR}/bin 
+    COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZeGenCode/GenCode.pcg ${CMAKE_SOURCE_DIR}/bin 
 )

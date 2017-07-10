@@ -175,3 +175,21 @@ bool GJunction::validate()
   if (destination.expired()) return false;
   return true;
 }
+
+/**
+* The Size Adapter, gets the maximum coordinates of the object drawing and adapt the
+* declared size to fully contain it.
+* @param size the size to adapt
+*/
+void GJunction::sizeAdapter(Size & size) const
+{
+	// We suppose that source and destination
+	// are covered by the related drawing
+	// so we are interested at the fixed points.
+	for (unsigned i = 1; i<line.size() - 1; ++i)
+	{
+		size.x = VMAX(line[i].x, size.x);
+		size.y = VMAX(line[i].y, size.y);
+	}
+	
+}

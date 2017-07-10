@@ -24,6 +24,8 @@
 #include "GDrawHelper.h"
 #include "math.h"
 
+#define DIM 15
+
 SInitState::SInitState()
 {
 }
@@ -38,7 +40,7 @@ Point SInitState::borderPoint(Point p)
   double dy=p.y-center.y;
   if ((dx*dx)+(dy*dy)<10) return center; 
   double alpha=atan2(abs(dy), abs(dx));
-  return Point( (int)(15*cos(alpha)*SIGNUM(dx) +center.x ),(int) ( 15*sin(alpha)*SIGNUM(dy) +center.y) );				
+  return Point( (int)(DIM*cos(alpha)*SIGNUM(dx) +center.x ),(int) ( DIM*sin(alpha)*SIGNUM(dy) +center.y) );				
 }
 
 
@@ -46,7 +48,7 @@ bool SInitState::toSelect(int x, int y)
 {
   double dx=x-center.x;
   double dy=y-center.y;
-  if ((dx*dx)+(dy*dy)<=(15*15)) return true;
+  if ((dx*dx)+(dy*dy)<=(DIM*DIM)) return true;
   return false;	
 }
 
@@ -58,12 +60,18 @@ void SInitState::draw(wxDC& deviceContext, bool isSelected)
 {
   GDrawHelper dc(deviceContext);
   if (isSelected)
-    dc.fillCircle(center.x,center.y,15,5,0x000000);
+    dc.fillCircle(center.x,center.y,DIM,5,0x000000);
   else
-    dc.fillCircle(center.x,center.y,15,2,0x000000);
+    dc.fillCircle(center.x,center.y,DIM,2,0x000000);
 }
 
 bool SInitState::isRemoveable() const
 {
   return false;
+}
+
+void SInitState::sizeAdapter(Size & size) const
+{
+	size.x = VMAX(size.x, center.x + DIM);
+	size.y = VMAX(size.y, center.y + DIM);
 }

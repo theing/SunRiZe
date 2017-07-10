@@ -63,8 +63,7 @@ class MyFrame1 : public wxFrame
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_panel1;
 		wxListBox* primaryList;
-		wxScrolledWindow* m_scrolledWindow1;
-		wxPanel* m_panel2;
+		wxScrolledWindow* m_panel2;
 		wxMenuBar* m_menubar1;
 		wxMenu* menuFile;
 		wxMenu* menuGenerate;

@@ -24,6 +24,9 @@
 #include "GFrame.h"
 #include "Glob.h"
 
+
+
+
 // application class
 class MyApp : public wxApp
 {
@@ -35,9 +38,22 @@ public:
 
 IMPLEMENT_APP(MyApp);
 
+
+
+
+
 bool MyApp::OnInit()
 {        
-    Glob::init();
-    GFrame::getInstance().Show(true);
-    return true;
+  
+  /*
+  // WINDOWS DEBUG CONSOLE
+  AllocConsole();
+  freopen("conin$", "r", stdin);
+  freopen("conout$", "w", stdout);
+  freopen("conout$", "w", stderr);
+  */
+
+  Glob::init();
+  GFrame::getInstance().Show(true);
+  return true;
 }

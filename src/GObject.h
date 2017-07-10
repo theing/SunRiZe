@@ -24,7 +24,7 @@
 #define GOBJECT_H
 
 #include "Var.h"
-
+#include "GDrawHelper.h"
 
 
 
@@ -151,6 +151,13 @@ public:
    * @return the indexer
    */
   int getIndexer() const;
+
+  /**
+   * The Size Adapter, gets the maximum coordinates of the object drawing and adapts the
+   * declared size to fully contain it.
+   * @param size the size to adapt
+   */
+  virtual void sizeAdapter(Size & size) const = 0;
   
 };
 

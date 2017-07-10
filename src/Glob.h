@@ -90,10 +90,16 @@ public:
 
   /**
    * @brief Get the path of the executable file
-   * @return the path of the executable dile as string or an empty string
+   * @return the path of the executable file as string or an empty string
    */
   static String getExecutablePath();
-  
+
+  /**
+   * @brief Make a backup file of the passed file name
+   * @return: false if backup cannot be done
+   */
+  static bool makeBackup(String fullPath);
+
 };
 
 #endif // GLOB_H

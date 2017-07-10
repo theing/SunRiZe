@@ -98,3 +98,9 @@ void SState::draw(wxDC& deviceContext, bool isSelected)
   String s;
   dc.text(content.getContainer()["name"].getString(),Rect(left,top,width,40),1);
 }
+
+void SState::sizeAdapter(Size & size) const
+{
+	size.x = VMAX(size.x, center.x + width / 2);
+	size.y = VMAX(size.y, center.y + 20);
+}

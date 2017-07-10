@@ -35,7 +35,7 @@ GDrawHelper::~GDrawHelper()
 
 void GDrawHelper::fillRect(Rect r, int size, Color color)
 {
-  wxBrush brush(wxColour(color), (color==0xffffff ? wxTRANSPARENT : wxSOLID )  );  
+  wxBrush brush(wxColour(color), (color==0xffffff ? wxBRUSHSTYLE_TRANSPARENT : wxBRUSHSTYLE_SOLID )  );
   device->SetBrush(brush);
   wxPen pen=*wxBLACK_PEN;
   pen.SetWidth(size);
@@ -102,7 +102,7 @@ void GDrawHelper::line(Point p1, Point p2,unsigned size,bool dashed)
 
 void GDrawHelper::fillCircle(int x, int y, int radius, int size, Color color)
 {
-  wxBrush brush(wxColour(color), (color==0xffffff ? wxTRANSPARENT : wxSOLID )  );  
+  wxBrush brush(wxColour(color), (color==0xffffff ? wxBRUSHSTYLE_TRANSPARENT : wxBRUSHSTYLE_SOLID )  );
   device->SetBrush(brush);
   wxPen pen=*wxBLACK_PEN;
   pen.SetWidth(size);
@@ -112,7 +112,7 @@ void GDrawHelper::fillCircle(int x, int y, int radius, int size, Color color)
 
 void GDrawHelper::fillRoundRect(Rect r, int radius,int size, Color color)
 {
-  wxBrush brush(wxColour(color), (color==0xffffff ? wxTRANSPARENT : wxSOLID )  );  
+  wxBrush brush(wxColour(color), (color==0xffffff ? wxBRUSHSTYLE_TRANSPARENT : wxBRUSHSTYLE_SOLID )  );
   device->SetBrush(brush);
   wxPen pen=*wxBLACK_PEN;
   pen.SetWidth(size);
@@ -121,7 +121,7 @@ void GDrawHelper::fillRoundRect(Rect r, int radius,int size, Color color)
 }
 void GDrawHelper::fillPolygon(int n, const Point p [], int size, Color color)
 {
-  wxBrush brush(wxColour(color), (color==0xffffff ? wxTRANSPARENT : wxSOLID )  );  
+  wxBrush brush(wxColour(color), (color==0xffffff ? wxBRUSHSTYLE_TRANSPARENT : wxBRUSHSTYLE_SOLID )  );
   device->SetBrush(brush);
   wxPen pen=*wxBLACK_PEN;
   pen.SetWidth(size);

@@ -38,7 +38,7 @@ public:
   virtual void draw(wxDC& deviceContext,bool isSelected);
   constexpr static const char * id="state";
   virtual const char * getId() const { return id; }
-
+  virtual void sizeAdapter(Size & size) const;
 };
 
 #endif // SSTATE_H

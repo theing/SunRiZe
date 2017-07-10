@@ -20,6 +20,7 @@
  *
  */
 
+#include "Commons.h"
 
 
 #include "AboutBox.h"
@@ -35,14 +36,14 @@ AboutBox::AboutBox( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	bSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_bitmap1 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxBITMAP(Icon) ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmap1 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( Icon_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("- SunRiZe v.0.1 -\nOpen model MDD with scriptable code generator.\n- (c) 2017 by Marco Spreafico -\n"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_ELLIPSIZE_MIDDLE );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("- SunRiZe v." VERSION_STRING " -\nOpen model MDD with scriptable code generator.\n- (c) 2017 by Marco Spreafico -\n"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_ELLIPSIZE_MIDDLE );
 	m_staticText1->Wrap( -1 );
 	bSizer1->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_ELLIPSIZE_MIDDLE );
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.\n See <http://www.gnu.org/licenses/>"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_ELLIPSIZE_MIDDLE );
 	m_staticText2->Wrap( 400 );
 	bSizer1->Add( m_staticText2, 0, wxALL|wxEXPAND, 5 );
 	

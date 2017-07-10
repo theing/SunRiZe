@@ -53,25 +53,12 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel1->SetSizer( bSizer2 );
 	m_panel1->Layout();
 	bSizer2->Fit( m_panel1 );
-	m_scrolledWindow1 = new wxScrolledWindow( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
-	m_scrolledWindow1->SetScrollRate( 5, 5 );
-	m_scrolledWindow1->SetBackgroundColour( wxColour( 255, 255, 255 ) );
-	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxVERTICAL );
-	
-	m_panel2 = new wxPanel( m_scrolledWindow1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panel2 = new wxScrolledWindow( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_panel2->SetScrollRate( 5, 5 );
 	m_panel2->SetBackgroundColour( wxColour( 255, 255, 255 ) );
 	
-	bSizer3->Add( m_panel2, 1, wxEXPAND | wxALL, 5 );
-	
-	
-	m_scrolledWindow1->SetSizer( bSizer3 );
-	m_scrolledWindow1->Layout();
-	bSizer3->Fit( m_scrolledWindow1 );
-	m_splitter1->SplitVertically( m_panel1, m_scrolledWindow1, 200 );
+	m_splitter1->SplitVertically( m_panel1, m_panel2, 200 );
 	bSizer1->Add( m_splitter1, 1, wxEXPAND, 5 );
-	
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();

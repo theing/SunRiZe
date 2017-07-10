@@ -22,10 +22,25 @@
 
 #include "Glob.h"
 #include <stdlib.h>  
-#include <unistd.h> 
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+
+#ifdef LINUX_PORTING
+#include <unistd.h>
+#endif
+
+
+#ifdef WINDOWS_PORTING
+  #include <direct.h>
+  #include <windows.h>
+  #define SEPARATION_CHAR '\\'
+#else
+  // I suppose this is always valid except for windows
+  #define SEPARATION_CHAR '/'
+#endif
+
 
 
 String Glob::scriptPath;
@@ -49,7 +64,7 @@ void Glob::init()
     {
       scriptPath=path;      
     }
-    if (scriptPath[scriptPath.size()-1]!='/') scriptPath+="/";
+    if (scriptPath[scriptPath.size()-1]!=SEPARATION_CHAR) scriptPath+=SEPARATION_CHAR;
 }
 
 String Glob::resPath() 
@@ -58,44 +73,74 @@ String Glob::resPath()
 }
 
 
-
 bool Glob::folderExists(String folder)
 {
+#ifdef WINDOWS_PORTING
+	if (_access(folder.c_str(), 0)) return false;
+	return true;
+#endif
+#ifdef LINUX_PORTING
   if (access(folder.c_str(),X_OK)) return false;
   return true;
+#endif
 }
 
 bool Glob::fileExists(String file)
 {
+#ifdef WINDOWS_PORTING
+	if (_access(file.c_str(), 0)) return false;
+	return true;
+#endif
+#ifdef LINUX_PORTING
   if (access(file.c_str(),F_OK)) return false;
   return true;
+#endif
 }
 
 String Glob::composePath(String path, String file)
 {
-  if (path.empty()) return file;
-  if (file.empty()) return path;  
-  if (path[path.size()-1]!='/') path+="/";
-  path+=file;
-  return path;
+	if (path.empty()) return file;
+	if (file.empty()) return path;
+	if (path[path.size() - 1] != SEPARATION_CHAR) path += SEPARATION_CHAR;
+	path += file;
+	return path;
 }
 
 
 
 bool Glob::makePath(String fullPath)
 {
-  String::size_type pos=fullPath.rfind('/');
-  if (pos==String::npos) return true;
-  String newPath=fullPath.substr(0,pos);  
+  String::size_type pos = fullPath.rfind(SEPARATION_CHAR);
+  if (pos == String::npos) return true;
+  String newPath = fullPath.substr(0, pos);
   if (folderExists(newPath)) return true;
   if (!Glob::makePath(newPath)) return false;
-  if((mkdir(newPath.c_str(),0777)) && errno!=EEXIST) return false;  
+#ifdef WINDOWS_PORTING
+  if (_mkdir(newPath.c_str())) return false;
+#endif
+#ifdef LINUX_PORTING
+  if (mkdir(newPath.c_str(),0777)) return false; 
+#endif
   return true;
 }
 
+/*
+   WARNING : This function gets the EXECUTABLE path that is not standard.
+   The implementation is different for each operating system
+*/
 
 String Glob::getExecutablePath()
 {
+#ifdef WINDOWS_PORTING
+	char dest[ MAX_PATH ];
+	GetModuleFileNameA(NULL, (LPSTR) dest, MAX_PATH);
+	String res(dest);
+  String::size_type pos = res.rfind('\\');
+  if (pos != String::npos) res = res.substr(0, pos + 1);
+  return res;
+#endif
+
+#ifdef LINUX_PORTING
     char dest[PATH_MAX];
     memset(dest,0,sizeof(dest)); 
     readlink("/proc/self/exe", dest, PATH_MAX);
@@ -104,4 +149,17 @@ String Glob::getExecutablePath()
     if (pos!=String::npos) res=res.substr(0,pos+1);
     else res="/";
     return res;
+#endif
+}
+
+
+
+bool Glob::makeBackup(String fullPath)
+{
+  // Standard linux backup extensions (also valid for all the operating systems)
+  String backup = fullPath + "~";
+  // If the file does not exists, it cannot be considered an error
+  if (!fileExists(fullPath)) return true;
+  if (rename(fullPath.c_str(), backup.c_str())) return false;
+  return true;
 }

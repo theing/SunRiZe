@@ -45,7 +45,7 @@ public:
   GField();
   GField(String name);
   virtual ~GField();
-private String name;	
+  private String name;	
 	
 	/**
 	 * The GField constructor receives the name.
@@ -94,7 +94,8 @@ private String name;
 	/**
 	 * This is used by the dialog boxes to ask an update of the value by exiting.
 	 */
-	public void update() =0 ;
+public :
+	void update() =0 ;
 	
 	/**
 	 * A GField always contains its value twice.

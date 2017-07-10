@@ -48,7 +48,6 @@ class GDrawHelper
 {
   wxDC * device;
   
-  
 public:
   
   enum Alignment {

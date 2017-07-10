@@ -190,3 +190,9 @@ void SModule::newContext()
     Shared<GObject> so(object);
     context->addItem(so);    
 }
+
+void SModule::sizeAdapter(Size & size) const
+{
+	size.x = VMAX(size.x,center.x + width / 2);
+	size.y = VMAX(size.y,center.y + height / 2);
+}

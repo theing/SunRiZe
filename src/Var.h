@@ -24,7 +24,10 @@
 #define Var_H
 
 #include "Commons.h"
+#ifndef _WIN32
 #include <bits/wordsize.h>
+#endif
+
 #include <sstream>
 
 

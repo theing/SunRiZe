@@ -25,7 +25,7 @@
 #include <string.h>
 #include <algorithm>
 #include <functional>
-
+#include <fstream>
 
 
 Vector<String> Text::split(const String _str, const String _delimiters)
@@ -55,11 +55,6 @@ String Text::replace( String _str, const String _find_what, const String _replac
   return _str;
 }
 
-String Text::lower(String _str)
-{
-  std::transform (_str.begin (), _str.end (), _str.begin (), (int(*)(int)) std::tolower);
-  return _str;
-}
 
 String Text::trim(String _str, String _chr)
 {
@@ -81,37 +76,6 @@ String Text::trimRight(String _str, String _chr)
   return _str;
 }
 
-String Text::upper(String _str)
-{
-  std::transform (_str.begin (), _str.end (), _str.begin (), (int(*)(int)) std::toupper);
-  return _str;
-}
-
-
-String Text::format( const char * _fmt,  ... ) 
-{
-  String::size_type l;
-  char *pnt;
-  va_list args;
-  va_start( args, _fmt );
-  l=vasprintf( &pnt, _fmt, args );
-  va_end( args );
-  String r ( (const char *)pnt,l ) ;
-  free (pnt);
-  return r;
-
-}
-
-int Text::scan( String &_data, const char * _fmt,  ... )
-{
-  int l;
-  va_list args;
-  va_start( args, _fmt );
-  l=vsscanf( _data.c_str(), _fmt, args );
-  va_end( args );
-  return l;
-}
-
 
 String Text::padLeft(String _str, char c, unsigned  min)
 {
@@ -131,4 +95,26 @@ String Text::padRight(String _str, char c, unsigned min)
     return _str+String(min-s,c);
   }
   return _str;
+}
+
+String Text::readFile(String _name)
+{
+  std::ifstream inFile;
+  inFile.open(_name);
+  if (inFile.fail()) throw OSException();
+  std::stringstream buffer;
+  buffer << inFile.rdbuf();
+  inFile.close();
+  return buffer.str();
+}
+
+void Text::writeFile(String _name, String _content)
+{
+
+  std::ofstream outFile;
+  outFile.open(_name);
+  if (outFile.fail()) throw OSException();
+  outFile << _content;
+  outFile.close();
+
 }

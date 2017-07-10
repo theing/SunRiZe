@@ -69,3 +69,10 @@ void SCondition::draw(wxDC& deviceContext, bool isSelected)
     else
       dc.fillPolygon(4, p, 2,0x00ffff);		
 }
+
+void SCondition::sizeAdapter(Size & size) const
+{
+	size.x = VMAX(size.x, center.x + DIM);
+	size.y = VMAX(size.y, center.y + DIM);
+
+}

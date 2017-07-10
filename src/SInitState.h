@@ -40,7 +40,7 @@ public:
   virtual bool isRemoveable() const ;
   constexpr static const char * id="initstate";
   virtual const char * getId() const { return id; }
-  
+  virtual void sizeAdapter(Size & size) const;
 };
 
 #endif // SINITSTATE_H

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SunRiZe
  * 
  * (c) 2017 by Marco Spreafico
@@ -24,27 +24,40 @@
 #include "GFrame.h"
 #include "GJunction.h"
 
-GPanel::GPanel()
+GPanel::GPanel(wxScrolledWindow * ctrl)
 {
-  setCurrentContext(mainContext);  
+  this->ctrl = ctrl;
+  setCurrentContext(mainContext); 
 }
 
 GPanel::~GPanel()
 {
 }
 
-void GPanel::draw(wxDC& dc)
+
+void GPanel::draw()
 {
+  Size s=ctrl->GetVirtualSize();
+  Size s2 = currentContext->getContextSize();
+  if ((s2.x > s.x) || (s2.y > s.y))
+  {
+	  ctrl->SetVirtualSize(s2);
+  }
+  wxClientDC dc(ctrl);
+  ctrl->DoPrepareDC(dc);
+  dc.Clear();
   currentContext->draw(dc);
 }
 
 void GPanel::mouseDrag(Point& p)
 {  
-  currentContext->moveObject(p.x-oldPoint.x,p.y-oldPoint.y);
-  oldPoint=p;
-  GFrame::getInstance().refreshDraw();
-  GFrame::getInstance().dataChanged();
-}
+	if (currentContext->moveObject(p.x - oldPoint.x, p.y - oldPoint.y))
+	{
+		GFrame::getInstance().refreshDraw();
+		GFrame::getInstance().dataChanged();
+	}
+	oldPoint = p;
+  }
 
 void GPanel::mouseUp(Point& p)
 {
@@ -103,6 +116,7 @@ void GPanel::keyDown(int keycode)
     case WXK_INSERT :
     case WXK_NUMPAD_INSERT:
       switchToPrimary();
+      return;
     case WXK_DELETE :
     case WXK_NUMPAD_DELETE :
       getCurrentContext().keyRemove();

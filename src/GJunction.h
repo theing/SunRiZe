@@ -115,6 +115,7 @@ public:
    */
   bool validate();
   
+  virtual void sizeAdapter(Size & size) const;
 };
 
 #endif // GJUNCTION_H

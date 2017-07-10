@@ -43,7 +43,7 @@ public:
   virtual void newContext();
   constexpr static const char * id="module";
   virtual const char * getId() const { return id; }
-
+  virtual void sizeAdapter(Size & size) const;
 };
 
 #endif // MODULE_H

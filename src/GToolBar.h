@@ -59,6 +59,7 @@ public:
    * @param resource the resource PNG name
    * @param type the const char * string ID of the current choice
    */
+
   void addItem(const char *xpm[],const char * type);
   /**
    * @brief Chooses an set which toolbar to show at the moment.

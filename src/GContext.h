@@ -186,6 +186,12 @@ public:
    */
   void loadCollection(Var & v);
   
+  /**
+   * This function get the maximum size of the context in pixels.
+   * @return the context size
+   */
+  Size getContextSize() const;
+
 };
 
 #endif // GCONTEXT_H

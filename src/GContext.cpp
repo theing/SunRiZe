@@ -25,6 +25,8 @@
 #include "GJunction.h"
 #include "MBox.h"
 
+#define ADJUST 30;
+
 GContext::GContext(GPrimary & p):parent(&p)
 {
   selected=-1;
@@ -191,4 +193,16 @@ void GContext::loadCollection(Var& v)
     go->loadObject(item,map);
     content.push_back(go);    
   }
+}
+
+Size GContext::getContextSize() const
+{
+	Size s;
+	for (auto item : content)
+	{
+		item->sizeAdapter(s);
+	}
+	s.x += ADJUST;
+	s.y += ADJUST;
+	return s;
 }
