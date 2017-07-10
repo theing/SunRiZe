@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{4316FB61-8E97-4901-AB81-D0743F4F971A}</ProjectGuid>
+    <RootNamespace>SunRiZe</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level1</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\python\include;..\..\wxwidgets\include;..\..\wxwidgets\lib\vc_x64_lib\mswu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\python\libs;..\..\wxwidgets\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxmsw31u_core.lib;wxbase31u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <LinkTimeCodeGeneration />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\AboutBox.h" />
+    <ClInclude Include="..\..\..\src\Commons.h" />
+    <ClInclude Include="..\..\..\src\Factory.h" />
+    <ClInclude Include="..\..\..\src\FieldsHelper.h" />
+    <ClInclude Include="..\..\..\src\GContext.h" />
+    <ClInclude Include="..\..\..\src\GDrawHelper.h" />
+    <ClInclude Include="..\..\..\src\GenCode.h" />
+    <ClInclude Include="..\..\..\src\GFrame.h" />
+    <ClInclude Include="..\..\..\src\GJunction.h" />
+    <ClInclude Include="..\..\..\src\Glob.h" />
+    <ClInclude Include="..\..\..\src\GObject.h" />
+    <ClInclude Include="..\..\..\src\GPanel.h" />
+    <ClInclude Include="..\..\..\src\GPrimary.h" />
+    <ClInclude Include="..\..\..\src\GSelector.h" />
+    <ClInclude Include="..\..\..\src\GStandalone.h" />
+    <ClInclude Include="..\..\..\src\GToolBar.h" />
+    <ClInclude Include="..\..\..\src\JSONParser.h" />
+    <ClInclude Include="..\..\..\src\MainPanel.h" />
+    <ClInclude Include="..\..\..\src\MBox.h" />
+    <ClInclude Include="..\..\..\src\ModuleDialog.h" />
+    <ClInclude Include="..\..\..\src\ModuleDialogImplementation.h" />
+    <ClInclude Include="..\..\..\src\OSPorting.h" />
+    <ClInclude Include="..\..\..\src\SCondition.h" />
+    <ClInclude Include="..\..\..\src\SDependency.h" />
+    <ClInclude Include="..\..\..\src\SInitState.h" />
+    <ClInclude Include="..\..\..\src\SModule.h" />
+    <ClInclude Include="..\..\..\src\SState.h" />
+    <ClInclude Include="..\..\..\src\StateDialog.h" />
+    <ClInclude Include="..\..\..\src\StateDialogImplementation.h" />
+    <ClInclude Include="..\..\..\src\STransition.h" />
+    <ClInclude Include="..\..\..\src\Text.h" />
+    <ClInclude Include="..\..\..\src\TransitionDialog.h" />
+    <ClInclude Include="..\..\..\src\TransitionDialogImplementation.h" />
+    <ClInclude Include="..\..\..\src\Var.h" />
+    <ClInclude Include="..\..\..\src\_Exception.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\AboutBox.cpp" />
+    <ClCompile Include="..\..\..\src\Factory.cpp" />
+    <ClCompile Include="..\..\..\src\FieldsHelper.cpp" />
+    <ClCompile Include="..\..\..\src\GContext.cpp" />
+    <ClCompile Include="..\..\..\src\GDrawHelper.cpp" />
+    <ClCompile Include="..\..\..\src\GenCode.cpp" />
+    <ClCompile Include="..\..\..\src\GFrame.cpp" />
+    <ClCompile Include="..\..\..\src\GJunction.cpp" />
+    <ClCompile Include="..\..\..\src\Glob.cpp" />
+    <ClCompile Include="..\..\..\src\GObject.cpp" />
+    <ClCompile Include="..\..\..\src\GPanel.cpp" />
+    <ClCompile Include="..\..\..\src\GPrimary.cpp" />
+    <ClCompile Include="..\..\..\src\GSelector.cpp" />
+    <ClCompile Include="..\..\..\src\GStandalone.cpp" />
+    <ClCompile Include="..\..\..\src\GToolBar.cpp" />
+    <ClCompile Include="..\..\..\src\JSONParser.cpp" />
+    <ClCompile Include="..\..\..\src\main.cpp" />
+    <ClCompile Include="..\..\..\src\MainPanel.cpp" />
+    <ClCompile Include="..\..\..\src\MBox.cpp" />
+    <ClCompile Include="..\..\..\src\ModuleDialog.cpp" />
+    <ClCompile Include="..\..\..\src\ModuleDialogImplementation.cpp" />
+    <ClCompile Include="..\..\..\src\SCondition.cpp" />
+    <ClCompile Include="..\..\..\src\SDependency.cpp" />
+    <ClCompile Include="..\..\..\src\SInitState.cpp" />
+    <ClCompile Include="..\..\..\src\SModule.cpp" />
+    <ClCompile Include="..\..\..\src\SState.cpp" />
+    <ClCompile Include="..\..\..\src\StateDialog.cpp" />
+    <ClCompile Include="..\..\..\src\StateDialogImplementation.cpp" />
+    <ClCompile Include="..\..\..\src\STransition.cpp" />
+    <ClCompile Include="..\..\..\src\Text.cpp" />
+    <ClCompile Include="..\..\..\src\TransitionDialog.cpp" />
+    <ClCompile Include="..\..\..\src\TransitionDialogImplementation.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\wxWidgets-3.1.0\samples\minimal\vc_x64_mswu\GenCode.pcg" />
+    <None Include="..\..\..\src\Condition.xpm" />
+    <None Include="..\..\..\src\Dependency.xpm" />
+    <None Include="..\..\..\src\Icon.xpm" />
+    <None Include="..\..\..\src\Module.xpm" />
+    <None Include="..\..\..\src\State.xpm" />
+    <None Include="..\..\..\src\Transition.xpm" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
