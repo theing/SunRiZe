@@ -363,11 +363,12 @@ def generateModule( data ) :
   gc.file("src/"+name.capitalize()+".c")
   gc.kexp("include_imp")
   gc_code("USER_INCLUDES");
-  gc.line("");  
+  gc.line("")
+  gc.kexp("global_linking")
   gc.kexp("imp_attrib")
   gc.kexp("imp_tokens")
   gc.kexp("imp_declarations")  
-  gc.line("");  
+  gc.line("")
   gc_code("BODY_PREFIX");
   gc.kexp("imp_code")
   gc_code("BODY_POSTFIX");
@@ -412,8 +413,6 @@ def generateModule( data ) :
     
     if att["visibility"]==0 :
       #Private
-      gc.declare("CODE_"+name)
-      gc.use("imp_attrib")
       insertComment("",att["comment"]);
       if att["value"]=="":
         if v[1]=="" :
@@ -424,15 +423,19 @@ def generateModule( data ) :
       #Public
       insertComment("",att["comment"]);
       if v[1]=="" :
-        gc.line(volatile+v[0]+" "+name+"_"+att["name"]+ifValue+";");
+        gc.line(volatile+v[0]+" "+att["name"]+ifValue+";");
         gc.declare('HEAD_'+name) 
         gc.use("head_attrib" )
-        gc.line("extern "+volatile+" "+v[0]+" "+name+"_"+att["name"]+";");
+        gc.line("extern"+volatile+" "+v[0]+" "+name+"_"+att["name"]+";");
       else :
-        gc.line(volatile+v[0]+" "+name+"_"+att["name"]+v[1]+ifValue+";");
+        gc.line(volatile+v[0]+" "+att["name"]+v[1]+ifValue+";");
         gc.declare('HEAD_'+name) 
         gc.use("head_attrib" )
-        gc.line("extern "+volatile+v[0]+" "+name+"_"+att["name"]+v[1]+";");
+        gc.line("extern"+volatile+v[0]+" "+name+"_"+att["name"]+v[1]+";");
+      gc.declare("CODE_"+name)
+      gc.use("global_linking")
+      gc.line("#define %s %s_%s" %(att['name'],name,att['name']))
+  
 
   # Operations
   
@@ -469,33 +472,41 @@ def generateModule( data ) :
         attopGuard[na]=True  
     
     
-    op="static "+ope["type"]+" "+ope["name"];    
-    if ope["visibility"]==1 :
-      op=ope["type"]+" "+name+"_"+ope["name"];
+    op=ope["type"]+" "+ope["name"];
+    opglob=ope["type"]+" "+name+"_"+ope["name"];
+    if ope["visibility"]==0 :
+      op="static "+op;    
     
-    op+="( ";
+    
+    opx="( ";
     bp="";
     comment = ope["comment"]
    
     for prm in ope["parameters"] :
       v=splitType(prm["type"])
-      op+=bp+v[0]+" "+prm["name"]+v[1]
+      opx+=bp+v[0]+" "+prm["name"]+v[1]
       bp=" , "
     
-    op=op+" )"
+    opx=opx+" )"
+    
+    op+=opx;
+    opglob+=opx;
   
     if ope["visibility"]==0 :
       # Private
       gc.declare("CODE_"+name)
       gc.use("imp_declarations")
       gc.line(op+";");
+      gc.declare("CODE_"+name)
     else :
       # Public
       gc.declare("HEAD_"+name)
       gc.use("head_code")
-      gc.line(op+";");
+      gc.line(opglob+";");
+      gc.declare("CODE_"+name)
+      gc.use("global_linking")
+      gc.line("#define %s %s_%s" %(ope['name'],name,ope['name']))
     
-    gc.declare("CODE_"+name)
     gc.use("imp_code");
     insertComment("",comment);      
     gc.line(op);
