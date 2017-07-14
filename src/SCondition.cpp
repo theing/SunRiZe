@@ -21,6 +21,7 @@
  */
 
 #include "SCondition.h"
+#include "Glob.h"
 
 #define DIM 20
 
@@ -76,3 +77,14 @@ void SCondition::sizeAdapter(Size & size) const
 	size.y = VMAX(size.y, center.y + DIM);
 
 }
+
+bool SCondition::autoRing(GJunction * j, Point & p1, Point & p2, Point & p3)
+{
+  return false;
+}
+
+bool SCondition::accept(GJunction * j, bool dirIn)
+{
+  return true;
+}
+

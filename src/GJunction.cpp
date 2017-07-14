@@ -21,6 +21,8 @@
  */
 
 #include "GJunction.h"
+#include "GStandalone.h"
+#include "GFrame.h"
 
 #define NEAR 40
 #define PROXY 5
@@ -46,12 +48,34 @@ bool GJunction::isPrimary() const
 
 bool GJunction::setEnd(Shared<GObject>& end)
 {
-  if (source.use_count()==0) 
+  GStandalone *gs= dynamic_cast<GStandalone *>(end.get());
+  if (source.use_count()==0)
   {
+    if (!gs->accept(this,false)) {
+      GFrame::getToolBar().clearSelection();
+      return false;
+    }
     source=end;
     return false;
   }
+  if (!gs->accept(this, true)) {
+    GFrame::getToolBar().clearSelection();
+    return false;
+  }
   destination=end;
+  if (source.lock()==destination.lock())
+  {
+    GStandalone *gs = dynamic_cast<GStandalone*>(source.lock().get());
+    Point p1, p2, p3;
+    if (!gs->autoRing(this, p1, p2, p3)) {
+      GFrame::getToolBar().clearSelection();
+      return false;
+    }
+    line = Vector<Point>(5);
+    line[1] = p1;
+    line[2] = p2;
+    line[3] = p3;
+  }
   return true;
 }
 
@@ -192,4 +216,14 @@ void GJunction::sizeAdapter(Size & size) const
 		size.y = VMAX(line[i].y, size.y);
 	}
 	
+}
+
+const Weak<GObject> & GJunction::getSource()
+{
+  return source;
+}
+
+const Weak<GObject>& GJunction::getDestination()
+{
+  return destination;
 }

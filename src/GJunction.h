@@ -116,6 +116,17 @@ public:
   bool validate();
   
   virtual void sizeAdapter(Size & size) const;
+
+  /**
+  * @brief Source Getter.
+  * @return the const reference to the source weak
+  */
+  const Weak<GObject> & getSource();
+  /**
+  * @brief Destination Getter.
+  * @return the const reference to the destination weak
+  */
+  const Weak<GObject> & getDestination();
 };
 
 #endif // GJUNCTION_H

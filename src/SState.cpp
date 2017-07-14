@@ -104,3 +104,17 @@ void SState::sizeAdapter(Size & size) const
 	size.x = VMAX(size.x, center.x + width / 2);
 	size.y = VMAX(size.y, center.y + 20);
 }
+
+bool SState::autoRing(GJunction * j, Point &p1, Point &p2, Point &p3)
+{
+  // The state is allowed to have auto rings (it can be only a transition)
+  p1 = Point(center.x+width/2+20, center.y);
+  p2 = Point(center.x + width / 2 + 20, center.y + 40);
+  p3 = Point(center.x, center.y + 40);
+  return true;
+}
+
+bool SState::accept(GJunction * j, bool dirIn)
+{
+  return true;
+}

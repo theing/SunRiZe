@@ -130,8 +130,8 @@ void GContext::keyRemove()
 
 void GContext::draw(wxDC& deviceContext)
 {
-  for (int i=0; i<(int)content.size() ; ++i ) {    
-    content[i]->draw(deviceContext,(i==selected));
+  for (int i=0; i<(int)content.size() ; ++i ) { 
+    content[i]->draw(deviceContext,(i==selected));    
   }
 }
 
@@ -200,6 +200,7 @@ Size GContext::getContextSize() const
 	Size s;
 	for (auto item : content)
 	{
+    if (item)
 		item->sizeAdapter(s);
 	}
 	s.x += ADJUST;

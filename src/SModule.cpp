@@ -196,3 +196,13 @@ void SModule::sizeAdapter(Size & size) const
 	size.x = VMAX(size.x,center.x + width / 2);
 	size.y = VMAX(size.y,center.y + height / 2);
 }
+
+bool SModule::autoRing(GJunction * j, Point &p1, Point &p2, Point &p3)
+{
+  return false;
+}
+
+bool SModule::accept(GJunction * j, bool dirIn)
+{
+  return true;
+}

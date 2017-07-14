@@ -41,6 +41,10 @@ public:
   constexpr static const char * id="initstate";
   virtual const char * getId() const { return id; }
   virtual void sizeAdapter(Size & size) const;
+  virtual bool autoRing(GJunction * j, Point &p1, Point &p2, Point &p3);
+  virtual bool accept(GJunction * j, bool dirIn);
+
+
 };
 
 #endif // SINITSTATE_H

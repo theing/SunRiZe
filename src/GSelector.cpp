@@ -40,7 +40,7 @@ void GSelector::refresh()
   listBox->Append(wxT("(Main)"));
   for (Shared<GObject> & item : GFrame::getPanel().getMainContext().contextList())
   {
-    if (item->isPrimary()) 
+    if ((item)&&(item->isPrimary()))
     {         
       GPrimary * primary=dynamic_cast<GPrimary*>(item.get());
       if (primary->getContext())

@@ -25,7 +25,7 @@
 
 #include "GObject.h"
 #include "GDrawHelper.h"
-
+#include "GJunction.h"
 /**
  * @class GStandalone
  * @author Marco
@@ -106,6 +106,28 @@ public:
    * @param map the association beween ID and Object to be used by the junctions
    */
   virtual void loadObject(Var & v,Map< int,Shared<GObject> > &map);
+
+
+  /**
+  * @brief check for AutoRing availablility for the model type of junction and fill p1/p2 
+  * with the related break points
+  * @param GJunction  
+  * @param p1 the first point to break
+  * @param p2 the second point to break
+  * @param p3 the third point to break
+  * @return true if the junction is possible, false otherwise
+  */
+
+  virtual bool autoRing(GJunction * j, Point &p1, Point &p2, Point &p3) = 0;
+
+  /**
+  * @brief check if the specific junction is accepted 
+  * @param j the specific junction
+  * @param dirIn true if direction IN false if direction OUT
+  * @return true if the junction is possible, false otherwise
+  */
+
+  virtual bool accept(GJunction * j, bool dirIn)=0;
 
 };
 

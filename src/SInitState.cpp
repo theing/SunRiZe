@@ -75,3 +75,15 @@ void SInitState::sizeAdapter(Size & size) const
 	size.x = VMAX(size.x, center.x + DIM);
 	size.y = VMAX(size.y, center.y + DIM);
 }
+
+bool SInitState::autoRing(GJunction * j, Point & p1, Point & p2, Point & p3)
+{
+  return false;
+}
+
+bool SInitState::accept(GJunction *  j, bool dirIn)
+{
+  // Does not accept incoming transitions
+  if (dirIn) return false;
+  return true;
+}
