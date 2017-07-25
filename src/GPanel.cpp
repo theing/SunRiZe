@@ -1,7 +1,7 @@
 ﻿/*
  * SunRiZe
  * 
- * (c) 2017 by Marco Spreafico
+ * (c) 2017 by TheIng ( https://theing.blogspot.com )
  * 
  * This file is part of SunRiZe.
  *
