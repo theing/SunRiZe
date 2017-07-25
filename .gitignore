@@ -1,1 +1,7 @@
 Build/*
+
+.gitignore
+!Build/HowToCompile.rtf
+!Build/MSVC/SunRiZe.sln
+!Build/MSVC/SunRiZe/SunRiZe.vcxproj
+!Build/MSVC/SunRiZe/SunRiZe.vcxproj.filters
