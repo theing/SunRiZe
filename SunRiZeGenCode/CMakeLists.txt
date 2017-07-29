@@ -10,3 +10,6 @@ execute_process(
 execute_process(
     COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZeGenCode/GenCode.pcg ${CMAKE_SOURCE_DIR}/bin 
 )
+execute_process(
+    COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZe.ico ${CMAKE_SOURCE_DIR}/bin 
+)
