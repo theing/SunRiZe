@@ -28,7 +28,7 @@
 
 /**
  * @class GDrawHelper
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file GDrawHelper.h
  * @brief Abstraction of the drawing essential.

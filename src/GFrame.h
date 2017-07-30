@@ -39,7 +39,7 @@ class GFrame;
 
 /**
  * @class GFrame
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file GFrame.h
  * @brief The main frame management (SINGLETON).

@@ -28,7 +28,7 @@
 #include "GJunction.h"
 /**
  * @class GStandalone
- * @author Marco
+ * @author TheIng
  * @date 06/25/17
  * @file GStandalone.h
  * @brief The STANDALONE Objects class

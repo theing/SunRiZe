@@ -29,7 +29,7 @@
 
 /**
  * @class GContext
- * @author Marco
+ * @author TheIng
  * @date 06/27/17
  * @file GContext.h
  * @brief The graphic context.

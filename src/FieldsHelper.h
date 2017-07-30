@@ -31,7 +31,7 @@
 
 /**
  * @class FieldsHelper
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file FieldsHelper.h
  * @brief The fields helper for the Properties (Edit) Dialog Boxes with the related inner classes.
@@ -48,7 +48,7 @@ public:
 
   /**
    * @class Field
-   * @author Marco
+   * @author TheIng
    * @date 06/28/17
    * @file FieldsHelper.h
    * @brief The generic field abstract class/interface
@@ -123,7 +123,7 @@ public:
 
   /**
    * @class FieldsHelperTextChoiceField
-   * @author Marco
+   * @author TheIng
    * @date 06/28/17
    * @file FieldsHelper.h
    * @brief This field associates a VAR string with the text content of a simple combo box.
@@ -143,7 +143,7 @@ public:
   
   /**
    * @class FieldsHelperTextField
-   * @author Marco
+   * @author TheIng
    * @date 06/28/17
    * @file FieldsHelper.h
    * @brief This field associates a VAR string with a text field.
@@ -163,7 +163,7 @@ public:
   
   /**
    * @class FieldsHelperSpinField
-   * @author Marco
+   * @author TheIng
    * @date 06/28/17
    * @file FieldsHelper.h
    * @brief This field associates a VAR integer with a SPIN control numeric value.
@@ -182,7 +182,7 @@ public:
   
   /**
    * @class FieldsHelperCheckField
-   * @author Marco
+   * @author TheIng
    * @date 06/28/17
    * @file FieldsHelper.h
    * @brief This field associates a VAR boolean with a CHECKBOX
@@ -202,7 +202,7 @@ public:
   
   /**
    * @class FieldsHelperChoiceField
-   * @author Marco
+   * @author TheIng
    * @date 06/28/17
    * @file FieldsHelper.h
    * @brief This field associates a VAR integer, with a position of a combo box selection.
@@ -222,7 +222,7 @@ public:
   
   /**
    * @class FieldsHelperListField
-   * @author Marco
+   * @author TheIng
    * @date 06/28/17
    * @file FieldsHelper.h
    * @brief This special field associates an ARRAY of VAR to a specific set of FIELDS managing all the aspects of the contextual

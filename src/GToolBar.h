@@ -30,7 +30,7 @@ class GFrame;
 
 /**
  * @class GToolBar
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file GToolBar.h
  * @brief The ToolBar containing the GObjects to be placed.

@@ -30,7 +30,7 @@
 
 /**
  * @class GObject
- * @author Marco
+ * @author TheIng
  * @date 06/25/17
  * @file GObject.h
  * @brief The base abstract class for every graphics object.

@@ -30,7 +30,7 @@ int strerror_xsi(int errnum, char *buf, size_t buflen);
 
 /**
  * @class Exception
- * @author Marco
+ * @author TheIng
  * @date 06/27/17
  * @file Exception.h
  * @brief The generic dynamic exception.
@@ -60,7 +60,7 @@ public:
 
 /**
  * @class OSException
- * @author Marco
+ * @author TheIng
  * @date 06/27/17
  * @file Exception.h
  * @brief the OS Exception category.

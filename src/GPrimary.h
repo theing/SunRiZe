@@ -29,7 +29,7 @@ class GContext;
 
 /**
  * @class GPrimary
- * @author Marco
+ * @author TheIng
  * @date 06/25/17
  * @file GPrimary.h
  * @brief Defines a Primary Object

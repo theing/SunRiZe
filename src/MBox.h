@@ -26,7 +26,7 @@
 
 /**
  * @class MBox
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file MBox.h
  * @brief Dialog Boxes.

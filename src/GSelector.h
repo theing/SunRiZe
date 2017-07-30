@@ -30,7 +30,7 @@ class GFrame;
 
 /**
  * @class GSelector
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file GSelector.h
  * @brief The Context Selector.

@@ -27,7 +27,7 @@
 
 /**
  * @class Glob
- * @author Marco
+ * @author TheIng
  * @date 06/29/17
  * @file Glob.h
  * @brief Globals requests and tools.

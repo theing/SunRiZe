@@ -31,7 +31,7 @@ class GFrame;
 
 /**
  * @class GPanel
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file GPanel.h
  * @brief The drawing panel.

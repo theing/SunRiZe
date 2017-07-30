@@ -27,7 +27,7 @@
 
 /**
  * @class Factory
- * @author Marco
+ * @author TheIng
  * @date 06/28/17
  * @file Factory.h
  * @brief The Objects specific factory.

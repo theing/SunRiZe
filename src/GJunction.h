@@ -28,7 +28,7 @@
 
 /**
  * @class GJunction
- * @author Marco
+ * @author TheIng
  * @date 06/27/17
  * @file GJunction.h
  * @brief JUNCTION between GObjects.

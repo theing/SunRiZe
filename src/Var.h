@@ -42,7 +42,7 @@ typedef Vector<Var> VarArray;
 
 /**
  * @class Var
- * @author Marco
+ * @author TheIng
  * @date 06/27/17
  * @file Var.h
  * @brief Untyped polimorphic object.

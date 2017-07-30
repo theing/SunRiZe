@@ -28,7 +28,7 @@
 
 /**
  * @class GenCode
- * @author Marco
+ * @author TheIng
  * @date 06/27/17
  * @file GenCode.h
  * @brief The code generator

@@ -29,7 +29,7 @@
 
 /**
  * @class JSONParser
- * @author Marco
+ * @author TheIng
  * @date 06/27/17
  * @file JSONParser.h
  * @brief The JSON parser/converter.

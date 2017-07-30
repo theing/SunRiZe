@@ -27,7 +27,7 @@
 
   /**
    * @class Text
-   * @author Marco
+   * @author TheIng
    * @date 06/27/17
    * @file Text.h
    * @brief Text utilities.
