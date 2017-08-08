@@ -1,7 +1,7 @@
 /*
  * SunRiZe
  * 
- * (c) 2017 by TheIng ( https://theing.blogspot.com )
+ * (c) 2017 by Marco Spreafico ( https://theing.blogspot.com )
  * 
  * This file is part of SunRiZe.
  *
@@ -39,7 +39,7 @@ AboutBox::AboutBox( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_bitmap1 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( Icon_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("- SunRiZe v." VERSION_STRING " -\nOpen model MDD with scriptable code generator.\n- (c) 2017 by TheIng ( https://theing.blogspot.com ) -\n"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_ELLIPSIZE_MIDDLE );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("- SunRiZe v." VERSION_STRING " -\nOpen model MDD with scriptable code generator.\n- (c) 2017 by Marco Spreafico ( https://theing.blogspot.com ) -\n"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_ELLIPSIZE_MIDDLE );
 	m_staticText1->Wrap( -1 );
 	bSizer1->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
 	
