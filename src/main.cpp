@@ -45,13 +45,12 @@ IMPLEMENT_APP(MyApp);
 bool MyApp::OnInit()
 {        
   
-  /*
-  // WINDOWS DEBUG CONSOLE
+#ifdef WINDOWS_DEBUG_CONSOLE
   AllocConsole();
   freopen("conin$", "r", stdin);
   freopen("conout$", "w", stdout);
   freopen("conout$", "w", stderr);
-  */
+#endif
 
   Glob::init();
   GFrame::getInstance().Show(true);

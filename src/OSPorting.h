@@ -24,6 +24,7 @@
 #define _OSPORTING_
 
 /*
+
 OS Porting note:
 
 This program has been designed for Linux 64bit and ported to Windows 10 64bit, using the Windows
@@ -38,6 +39,7 @@ Please referst to these files if you want to create a specific porting. It shoul
 
 #if  defined(_MSC_VER)
 #define WINDOWS_PORTING 1
+//#define WINDOWS_DEBUG_CONSOLE 1
 #elif  defined(__linux__)
 #define LINUX_PORTING
 #else

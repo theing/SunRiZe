@@ -23,12 +23,12 @@
 #ifndef GENCODE_H
 #define GENCODE_H
 #include "Commons.h"
-#include <Python.h>
+#include "duktape.h"
 #include "Var.h"
 
 /**
  * @class GenCode
- * @author TheIng
+ * @author Marco
  * @date 06/27/17
  * @file GenCode.h
  * @brief The code generator
@@ -57,6 +57,8 @@ class GenCode
   
   static GenCode *instance;
   
+  duk_context *ctx;
+
   enum Property
   {
     RLine,
@@ -89,10 +91,6 @@ class GenCode
   /// Forward Recursive algorithm
   void forward(unsigned indent,Vector<String> &fill,FStruct & root,Vector<Row> & key);
 
-  /// Convert a var to a script compatible object
-  PyObject * varToPython(Var & v);
-  Var * model;
-
   /// The old file to preserve temporarely
   Vector<String> oldFile;
   /// The code blocks by the key
@@ -106,11 +104,21 @@ class GenCode
   bool onError;
   
 public:
+  
+  // Method Structure
+  struct Method {
+    const char * signature;
+    duk_ret_t(*funct)(duk_context *ctx);
+    int args;
+  };
 
+  void execWithErrors(String & exec);
+
+  void loadMethods(Method *meth);
 
   /**
    * @brief Static instance
-   * @note The python language integration requires static functions. Gencode is not a singleton by design, so we need to
+   * @note The javascript language integration requires static functions. Gencode is not a singleton by design, so we need to
    * save its reference, when we instance it inside a function.
    * @param g the current GenCode instance
    */
@@ -134,55 +142,46 @@ public:
   /**
    * @brief Declare the current KEYFILE
    */
-  static PyObject* declare(PyObject* self, PyObject* args);
+  static duk_ret_t declare(duk_context *ctx);
   /**
    * @brief Use a specific KEY of the current KEYFILE for the following code
    */
-  static PyObject* usekey(PyObject* self, PyObject* args);
+  static duk_ret_t usekey(duk_context *ctx);
   /**
    * @brief Insert a line of code
    */
-  static PyObject* line(PyObject* self, PyObject* args);
+  static duk_ret_t line(duk_context *ctx);
   /**
    * @brief Insert a KEYCODE of code
    */
-  static PyObject* block(PyObject* self, PyObject* args);
+  static duk_ret_t block(duk_context *ctx);
   /**
    * @brief Insert a KEY into the code
    */
-  static PyObject* keycode(PyObject* self, PyObject* args);
+  static duk_ret_t keycode(duk_context *ctx);
   /**
    * @brief Specify the filename associated with the current KEYFILE
    */  
-  static PyObject* filename(PyObject* self, PyObject* args);
-  /**
-   * @brief Bring the model inside the scripting language
-   */
-  static PyObject* getmodel(PyObject* self, PyObject* args);
+  static duk_ret_t filename(duk_context *ctx);
   /**
    * @brief Define a prefix for the language KEYCODE
    */
-  static PyObject* prefixes(PyObject* self, PyObject* args);
+  static duk_ret_t prefixes(duk_context *ctx);
   /**
    * @brief Insert the remaining KEYCODEs not used yet
    */
-  static PyObject* garbage(PyObject* self, PyObject* args);
+  static duk_ret_t garbage(duk_context *ctx);
   /**
    * @brief Raise an error to the code generator
    * Usually followed by an exit into the scripting language
    */
-  static PyObject* error(PyObject* self, PyObject* args);  
+  static duk_ret_t error(duk_context *ctx);
+  /**
+   * @brief a simple logger on the console
+   */
+  static duk_ret_t logger(duk_context *ctx);
 };
 
-class SPyObject {
-  PyObject *ptr;
-public:
-  SPyObject() { }
-  SPyObject(PyObject *p) { ptr=p; }
-  ~SPyObject() { /*Py_XDECREF(ptr);*/ }
-  PyObject **operator &() { return &ptr; }
-  operator PyObject *() { return ptr; }
-};
   
 
 #endif // GENCODE_H

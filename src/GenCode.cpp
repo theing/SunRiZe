@@ -30,37 +30,62 @@
 #include "Glob.h" 
 #include "GFrame.h"
 #include "stdio.h"
+#include "JSONParser.h"
 
 
 GenCode *GenCode::instance=nullptr;
 
 
-static struct PyMethodDef methods[] = {
-	{ "declare", GenCode::declare, METH_VARARGS, "Declare a new file key"},
-  { "use", GenCode::usekey, METH_VARARGS, "Use a new subkey"},
-  { "line", GenCode::line, METH_VARARGS, "Add a code line"},
-  { "code", GenCode::block, METH_VARARGS, "Add a code block"},
-  { "kexp", GenCode::keycode, METH_VARARGS, "Expand a key"},
-  { "file", GenCode::filename, METH_VARARGS, "Set filename to key"},
-  { "garbage", GenCode::garbage, METH_VARARGS, "Add a code block"},
-  { "getmodel", GenCode::getmodel, METH_VARARGS, "Get the model"},
-  { "prefix", GenCode::prefixes, METH_VARARGS, "Define the block comments"},
-  { "error", GenCode::error, METH_VARARGS, "Raise an error"},
-	{ NULL, NULL, 0, NULL }
+
+GenCode::Method methods[] = {
+	{ "gc_declare", GenCode::declare, DUK_VARARGS},
+  { "gc_use", GenCode::usekey, DUK_VARARGS},
+  { "gc_line", GenCode::line, DUK_VARARGS},
+  { "gc_code", GenCode::block, DUK_VARARGS },
+  { "gc_kexp", GenCode::keycode, DUK_VARARGS },
+  { "gc_file", GenCode::filename, DUK_VARARGS },
+  { "gc_garbage", GenCode::garbage, DUK_VARARGS },
+  { "gc_prefix", GenCode::prefixes, DUK_VARARGS },
+  { "gc_error", GenCode::error, DUK_VARARGS },
+  { "gc_log", GenCode::logger, DUK_VARARGS },
+  { NULL, NULL, 0 }
 };
+
+void GenCode::execWithErrors(String & exec)
+{
+  onError = false;
+  if (duk_peval_lstring(ctx, exec.c_str(), exec.size()) != 0) 
+    if (!onError) 
+    {
+      String msg("Internal Error : ");
+      msg += duk_safe_to_string(ctx, -1);
+      MBox::error(msg);
+      onError = true;
+    }
+  duk_pop(ctx);
+}
+
+void GenCode::loadMethods(Method * meth)
+{
+  while (meth->signature)
+  {
+    duk_push_c_function(ctx, meth->funct, meth->args);
+    duk_put_global_string(ctx, meth->signature);
+    ++meth;
+  }
+}
 
 GenCode::GenCode()
 {
   startprefix="//+";
   endprefix="//-";
-  Py_SetProgramName((char*)"GenCode");
-  Py_Initialize();
-  Py_InitModule("gc", methods);
+  ctx = duk_create_heap_default();
+  loadMethods(methods);
 }
 
 GenCode::~GenCode()
 {
-  Py_Finalize();
+  duk_destroy_heap(ctx);
 }
 
 
@@ -68,12 +93,16 @@ GenCode::~GenCode()
 
 bool GenCode::generateCode(Var &v)
 {  
-  model=&v;
-  String file=Glob::resPath()+"GenCode.pcg";
-  SPyObject model(PyDict_New());
-  //PyDict_SetItemString(model, "model", varToPython(v));
-  onError = false;
 
+  // Load Model (JSON)
+  String topush("model=");
+  topush += JSONParser::toString(v);
+  topush += ";";
+  execWithErrors(topush);
+  if (onError) return false;
+
+  String file=Glob::resPath()+"GenCode.js";
+  onError = false;
   String script;
   try
   {
@@ -86,69 +115,20 @@ bool GenCode::generateCode(Var &v)
     MBox::error(s);
     return false;
   }
-  if (PyRun_SimpleString(script.c_str())) {
-    MBox::error("The script has returned an internal error");
-  }
+  execWithErrors(script);
   if (onError) return false;
-  
+
   return true;
 }
 
 
 
 
-PyObject* GenCode::varToPython(Var& v)
+duk_ret_t GenCode::declare(duk_context *ctx)
 {
-    if (v.isInteger())
-    {
-      PyObject * answ=PyInt_FromLong((long)v.getInt());
-      return answ;
-    }
-    if (v.isFloat())
-    {
-      PyObject * answ= PyFloat_FromDouble(v.getFloat());
-      return answ;
-    }
-    if (v.isBoolean())
-    {
-      if (v.getBoolean()) return Py_True;
-      else Py_False;
-    }
-    if (v.isString())
-    {
-      String s=v.getString();
-      PyObject *answ=PyString_FromString(s.c_str());
-      return answ;
-    }
-    if (v.isArray())
-    {
-      PyObject *answ=PyList_New(v.getArray().size());
-      int i=0;
-      for (Var & w : v.getArray())
-      {
-        PyList_SetItem(answ,i++,varToPython(w));        
-      }
-      return answ;
-    } 
-    if (v.isContainer())
-    {
-      PyObject *answ=PyDict_New();
-      for (auto & w : v.getContainer())
-      {
-        PyDict_SetItemString(answ,w.first.c_str(),varToPython(w.second)); 
-      }
-      return answ;
-    }
-    Py_RETURN_NONE;
-}
-
-PyObject* GenCode::declare(PyObject* self, PyObject* args)
-{
-  SPyObject arg;
-	if(!PyArg_UnpackTuple(args, "declare", 1, 1, &arg)) Py_RETURN_NONE;
-  
-  char *a=PyBytes_AsString((PyObject*)arg);
-  String root(a);
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  String root(duk_to_string(ctx, 0));
   auto fil=GenCode::instance->files.find(root);  
   if (fil==GenCode::instance->files.end()) 
   {
@@ -166,112 +146,112 @@ PyObject* GenCode::declare(PyObject* self, PyObject* args)
   {
     (fs->lines)[""]=Vector<Row>();
     GenCode::instance->key=&((fs->lines)[""]);
-    Py_RETURN_NONE;
+    return 0;
   }
   GenCode::instance->key=&(ks->second);
-  Py_RETURN_NONE;
+  return 0;
 }
 
-PyObject* GenCode::usekey(PyObject* self, PyObject* args)
+duk_ret_t GenCode::usekey(duk_context *ctx)
 {
-  SPyObject arg;
-	if(!PyArg_UnpackTuple(args, "", 1, 1, &arg)) Py_RETURN_NONE;
-  char *a=PyBytes_AsString((PyObject*)arg);  
-  if (!GenCode::instance->root) Py_RETURN_NONE;
-  String key=a;
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  if (!GenCode::instance->root) return 0;
+  String key(duk_to_string(ctx, 0));
   FStruct *fs=GenCode::instance->root;
   auto ks=fs->lines.find(key);
   if (ks==fs->lines.end())
   {
     (fs->lines)[key]=Vector<Row>();
     GenCode::instance->key=&((fs->lines)[key]);
-    Py_RETURN_NONE;
+    return 0;
   }
   GenCode::instance->key=&(ks->second);   
-  Py_RETURN_NONE;
+  return 0;
 }
 
-PyObject* GenCode::line(PyObject* self, PyObject* args)
+duk_ret_t GenCode::line(duk_context *ctx)
 {
-  SPyObject arg;
-	if(!PyArg_UnpackTuple(args, "", 1, 1, &arg)) Py_RETURN_NONE;
-  char *a=PyBytes_AsString((PyObject*)arg);  
-  if (!GenCode::instance->key) Py_RETURN_NONE;
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  if (!GenCode::instance->key) return 0;
   Row r;
   r.type=RLine;
-  r.value=a;
+  r.value= duk_to_string(ctx, 0);
   GenCode::instance->key->push_back(r);  
-  Py_RETURN_NONE;
+  return 0;
 }
 
-PyObject* GenCode::block(PyObject* self, PyObject* args)
+duk_ret_t GenCode::block(duk_context *ctx)
 {
-  SPyObject arg;
-	if(!PyArg_UnpackTuple(args, "", 1, 1, &arg)) Py_RETURN_NONE;
-  char *a=PyBytes_AsString((PyObject*)arg);  
-  if (!GenCode::instance->key) Py_RETURN_NONE;
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  if (!GenCode::instance->key) return 0;
   Row r;
   r.type=RBlock;
-  r.value=a;
-  GenCode::instance->key->push_back(r);  
-  Py_RETURN_NONE;
+  r.value = duk_to_string(ctx, 0);
+  GenCode::instance->key->push_back(r);
+  return 0;
 }
 
-PyObject* GenCode::keycode(PyObject* self, PyObject* args)
+duk_ret_t GenCode::keycode(duk_context *ctx)
 {
-  SPyObject arg;
-	if(!PyArg_UnpackTuple(args, "", 1, 1, &arg)) Py_RETURN_NONE;
-  char *a=PyBytes_AsString((PyObject*)arg);  
-  if (!GenCode::instance->key) Py_RETURN_NONE;
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  if (!GenCode::instance->key) return 0;
   Row r;
   r.type=RKey;
-  r.value=a;
-  GenCode::instance->key->push_back(r);  
-  Py_RETURN_NONE;
+  r.value = duk_to_string(ctx, 0);
+  GenCode::instance->key->push_back(r);
+  return 0;
+}
+
+duk_ret_t GenCode::logger(duk_context *ctx)
+{
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  std::cout << duk_to_string(ctx, 0) << "\n";
+  return 0;
 }
 
 
-
-
-PyObject* GenCode::garbage(PyObject* self, PyObject* args)
+duk_ret_t GenCode::garbage(duk_context *ctx)
 {
   Row r;
   r.type=RGarbage;
   GenCode::instance->key->push_back(r);  
-  Py_RETURN_NONE;
+  return 0;
 }
 
 
-PyObject* GenCode::filename(PyObject* self, PyObject* args)
+duk_ret_t GenCode::filename(duk_context *ctx)
 {
-  SPyObject arg;
-	if(!PyArg_UnpackTuple(args, "", 1, 1, &arg)) Py_RETURN_NONE;
-  char *a=PyBytes_AsString((PyObject*)arg);  
-  if (!GenCode::instance->root) Py_RETURN_NONE;
-  String realname=Glob::composePath(GFrame::getInstance().getProjectPath(),a);
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  if (!GenCode::instance->root) return 0;
+  String realname=Glob::composePath(GFrame::getInstance().getProjectPath(), duk_to_string(ctx, 0));
   Glob::makePath(realname);
   GenCode::instance->root->name=realname;
-  Py_RETURN_NONE;
+  return 0;
 }
 
 
-PyObject* GenCode::error(PyObject* self, PyObject* args)
+duk_ret_t GenCode::error(duk_context *ctx)
 {
-  SPyObject arg;
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
   GenCode::instance->onError=true;
-	if(!PyArg_UnpackTuple(args, "", 1, 1, &arg)) Py_RETURN_NONE;
-  char *a=PyBytes_AsString((PyObject*)arg);  
-  MBox::error(String(a));
-  Py_RETURN_NONE;
+  MBox::error(String(duk_to_string(ctx, 0)));
+  return 0;
 }
 
-PyObject* GenCode::prefixes(PyObject* self, PyObject* args)
+duk_ret_t GenCode::prefixes(duk_context *ctx)
 {
-  SPyObject arg1,arg2;
-	if(!PyArg_UnpackTuple(args, "", 2, 2, &arg1,&arg2)) Py_RETURN_NONE;
-  GenCode::instance->startprefix=PyBytes_AsString((PyObject*)arg1);  
-  GenCode::instance->endprefix=PyBytes_AsString((PyObject*)arg2);
-  Py_RETURN_NONE;
+  int  i = duk_get_top(ctx);
+  if (i != 1) return 0;
+  GenCode::instance->startprefix= duk_to_string(ctx, 0);
+  GenCode::instance->endprefix= duk_to_string(ctx, 1);
+  return 0;
 }
 
 
@@ -426,7 +406,3 @@ void GenCode::forward(unsigned indent, Vector<String> &fill,FStruct& root, Vecto
   }
 }
 
-PyObject* GenCode::getmodel(PyObject* self, PyObject* args)
-{
-  return GenCode::instance->varToPython(*(GenCode::instance->model));
-}

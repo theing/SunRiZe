@@ -123,6 +123,12 @@
     <ClInclude Include="..\..\..\src\_Exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\duktape\src\duk_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\duktape\src\duktape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\AboutBox.cpp">
@@ -221,6 +227,9 @@
     <ClCompile Include="..\..\..\src\TransitionDialogImplementation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\duktape\src\duktape.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\Transition.xpm">
@@ -241,7 +250,7 @@
     <None Include="..\..\..\src\Condition.xpm">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="..\..\..\..\wxWidgets-3.1.0\samples\minimal\vc_x64_mswu\GenCode.pcg">
+    <None Include="..\..\..\SunRiZeGenCode\GenCode.js">
       <Filter>GenCode</Filter>
     </None>
   </ItemGroup>

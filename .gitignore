@@ -1,4 +1,5 @@
 Build/*
+duktape*
 .gitignore
 !Build/HowToCompile.rtf
 !Build/MSVC/SunRiZe.sln

@@ -160,6 +160,8 @@ bool Glob::makeBackup(String fullPath)
   String backup = fullPath + "~";
   // If the file does not exists, it cannot be considered an error
   if (!fileExists(fullPath)) return true;
+  // Remove old backup
+  unlink(backup.c_str());
   if (rename(fullPath.c_str(), backup.c_str())) return false;
   return true;
 }
