@@ -14,3 +14,4 @@ h3 { margin-top: 0.3cm; margin-bottom: 0.2cm; direction: inherit; font-variant: 
 h3.western { font-family: "Calibri", sans-serif; font-style: normal }
 h3.cjk { font-family: "Lucida Sans Unicode" }
 h3.ctl { font-family: "Mangal" }
+li { font-family: "Calibri" }
