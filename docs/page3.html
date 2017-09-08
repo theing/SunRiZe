@@ -1,0 +1,503 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 5.2.7.2 (Linux)"/>
+	<meta name="author" content="Marco "/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changedby" content="Marco "/>
+	<meta name="changed" content="2017-09-08T04:31:30.810272557"/>
+	<link rel="stylesheet" type="text/css" href="main.css" />
+</head>
+<body lang="en-US" dir="ltr">
+<h1 class="western">Introducing the Default Model</h1>
+<p class="western">As we said in the first chapter the model in
+<b>SunRiZe</b> is changeable so that, instead of “the model” this
+chapter should be called as “the <i>current</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">model”.</span></span></p>
+<p class="western"><span style="font-variant: normal"><span style="font-style: normal">However
+the current model, that is vaguely inspired to </span></span><span style="font-variant: normal"><span style="font-style: normal"><b>UML
+</b></span></span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">but
+is</span></span></span><span style="font-variant: normal"> </span><span style="font-variant: normal"><span style="font-style: normal"><b>NOT</b></span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">a
+</span></span></span><span style="font-variant: normal"><span style="font-style: normal"><b>UML</b></span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">model,
+is a good starting point for the design of firmware and small devices
+software design, and is currently the default for </span></span></span><span style="font-variant: normal"><span style="font-style: normal"><b>SunRiZe</b></span></span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">.</span></span></span></p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+For these reasons, in this document we will refers the current model
+as “the model”.</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<h2 class="western" style="margin-right: 3cm">Modules</h2>
+<p class="western">In the <i>Main Context toolbar</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">there
+are two symbols :</span></span></p>
+<p class="western"><img src="index_html_5bf71149a0c6bb64.gif" name="Image6" align="left" width="90" height="43" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western">The first one is the <b>Module</b> <span style="font-weight: normal">symbol,
+the second one is used to determine the </span><b>Dependencies</b>
+<span style="font-weight: normal">among modules.</span></p>
+<p class="western">The <b>Module </b><span style="font-weight: normal">is
+t</span>he basic unit in the model, <span style="font-weight: normal">and
+represents a “real” piece of code (in C two pieces of code, .h
+and .c ).</span></p>
+<p class="western"><span style="font-weight: normal">In</span>
+<b>SunRiZe</b> <span style="font-weight: normal">a </span><b>Module</b>
+<span style="font-weight: normal">is considered a “</span><i><span style="font-weight: normal">Primary
+– Stand-Alone object</span></i>” <span style="font-weight: normal">that
+is an object that does not depends from other objects and can contain
+optionally a sub – context (the FSM).</span></p>
+<p class="western"><span style="font-weight: normal">From the point
+of view of the object oriented programming instead you can think to</span>
+<span style="font-weight: normal">a</span> <b>Module</b> <span style="font-weight: normal">as
+a</span> <span style="font-weight: normal">unique static instance of
+a class with propers methods and attributes.</span></p>
+<p class="western" style="font-weight: normal">To place a Stand-Alone
+object, select it from the <i>ToolBar</i> :</p>
+<p class="western"><img src="index_html_8fc5128b13787f78.png" name="Image4" align="left" width="42" height="37" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><span style="font-weight: normal">an place it
+freely into the drawing area, in this case the </span><i><span style="font-weight: normal">Main
+Context</span></i><span style="font-variant: normal"> </span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">.</span></span></span></p>
+<p class="western"><img src="index_html_c7e3206c173ea722.png" name="Image12" align="left" width="97" height="77" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western" style="font-weight: normal">Part of the module
+code is auto-generated by the module and part must be edited with a
+simple editor (or an IDE) directly in the source files. When the code
+is regenerated, <b>SunRiZe </b>will take care to preserve certain
+pieces of code, using a keywords based technique.</p>
+<p class="western" style="font-weight: normal">Clicking twice on the
+module in the drawing area, we can open the <i>Module Editing Dialog
+Box</i><span style="font-variant: normal"> </span><span style="font-variant: normal"><span style="font-style: normal">:</span></span></p>
+<p class="western"><img src="index_html_ead34460899b2848.gif" name="Image7" align="left" width="465" height="328">
+  <br clear="left"/>
+</img>
+<br/>
+<br/>
+
+</p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+This is a four tabs dialog box, which allows you to define the
+general layout of the single module, defining :</p>
+<ul>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	Attributes</p>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	Operations</p>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	Tokens</p>
+</ul>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western" style="font-weight: normal">Despite the basic code
+generator uses the C language that is not natively object oriented,
+<b>SunRiZe</b> implements some of the typical characteristics of the
+object oriented programming, as the <i>overloading</i>, the
+<i>attribute/operations visibility </i><span style="font-variant: normal"><span style="font-style: normal">and
+the presence of a initializer or </span></span><i>constructor.</i></p>
+<p class="western" style="font-weight: normal">The Attributes are
+implemented as global variables, where the <i>Private</i><span style="font-variant: normal">
+</span><i>Attributes</i><span style="font-variant: normal"> </span><span style="font-variant: normal"><span style="font-style: normal">are
+defined as </span></span><span style="font-variant: normal"><span style="font-style: normal"><b>static</b></span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">and
+the </span></span><i>Public Attributes</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">are
+referenced in the header file.</span></span></p>
+<p class="western" style="font-weight: normal"><span style="font-variant: normal"><span style="font-style: normal">We
+can find the same behavior for the </span></span><i>Operations</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">that
+are simple C functions working on the local variables in the modules
+(remember that all the instances are single).</span></span></p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+This kind of implementation does not impact on the functionality of
+the model, and at the same time avoid the usage of the data
+structures typical of the C++ language and the related pointers.</p>
+<p class="western" style="font-weight: normal"><span style="font-variant: normal"><span style="font-style: normal">The
+trans-module </span></span><i>Overloading</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">property
+is introduced for </span></span><i>Public Attributes </i><span style="font-variant: normal"><span style="font-style: normal">and</span></span>
+<i>Operations</i><span style="font-variant: normal"><span style="font-style: normal">,</span></span>
+<span style="font-variant: normal"><span style="font-style: normal">because
+they are always defined and linked as : </span></span>
+</p>
+<p class="code-western" style="margin-bottom: 0.5cm"><i><span style="font-weight: normal">&lt;Module
+Name&gt;</span></i><b>_</b><i><span style="font-weight: normal">&lt;Attribute
+/ Operation Name&gt;</span></i></p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western" style="font-weight: normal">For example a public
+operation <i>sum</i><span style="font-variant: normal"> </span><span style="font-variant: normal"><span style="font-style: normal">inside
+the module </span></span><i>Calc</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">is
+always referred as </span></span><i>Calc_sum ( ) </i><span style="font-variant: normal"><span style="font-style: normal">that
+is similar to the object oriented call of </span></span><i>Calc.sum()</i><span style="font-variant: normal"><span style="font-style: normal">.</span></span></p>
+<p class="western" style="font-weight: normal"><span style="font-variant: normal"><span style="font-style: normal">The
+same function locally in the module where is defined, is then
+“</span></span><i>aliased</i><span style="font-variant: normal">”
+</span><span style="font-variant: normal"><span style="font-style: normal">as
+</span></span><i>sum( )</i><span style="font-variant: normal"><span style="font-style: normal">.</span></span></p>
+<p class="western" style="font-weight: normal"><span style="font-variant: normal"><span style="font-style: normal">The
+</span></span><span style="font-variant: normal"><span style="font-style: normal"><b>Tokens
+</b></span></span><span style="font-variant: normal"><span style="font-style: normal">instead
+are not related to the object oriented programming but are inspired
+by the </span></span><i>Petri Net Transitions</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">.</span></span></p>
+<p class="western" style="font-weight: normal"><span style="font-variant: normal"><span style="font-style: normal">They
+are global counters which can be limited, raised and eventually
+enclosed in specific public operations and they are used to define a
+specific kind of transitions in the </span></span><i>Finite State
+Machine</i><span style="font-variant: normal"><span style="font-style: normal">.</span></span></p>
+<h3 class="western" style="background: transparent; page-break-before: auto; page-break-after: avoid">
+Modules Dependencies</h3>
+<p class="western" style="font-variant: normal; font-style: normal"><span style="font-weight: normal">In
+</span><b>SunRiZe</b> <span style="font-weight: normal">a dependency
+is defined as a “Junction” object, that requires the existence of
+two standalone (and compatible) objects to be placed in the drawn.</span></p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+After created two modules, you can select this symbol from in the
+ToolBar :</p>
+<p class="western"><img src="index_html_b216279cc468fcbc.png" name="Image3" align="left" width="42" height="41" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western" style="font-variant: normal; font-style: normal"><span style="font-weight: normal">And
+place it between the </span><i><span style="font-weight: normal">Source
+</span></i><span style="font-weight: normal">and the </span><i><span style="font-weight: normal">Destination</span></i>
+<span style="font-weight: normal">.</span></p>
+<p class="western"><img src="index_html_97e69e33807f43c5.png" name="Image5" align="left" width="266" height="162" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western" style="font-variant: normal; font-style: normal">In
+this way, we are saying that <i>Module</i> <b>depends from </b><i><span style="font-weight: normal">Required</span></i><span style="font-weight: normal">.
+</span>
+</p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+This connection has two immediate effects :</p>
+<ol>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal">
+	<span style="font-weight: normal">The header file of </span><i><span style="font-weight: normal">Required</span></i>
+	<span style="font-weight: normal">is included into the body file of
+	</span><i><span style="font-weight: normal">Module</span></i> <span style="font-weight: normal">.</span></p>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	The initialization order of the modules can change.</p>
+</ol>
+<p class="western" style="font-variant: normal; font-style: normal"><span style="font-weight: normal">The
+point 2 means that the initialization order of the modules tries to
+follow the dependencies schema so that </span><i><span style="font-weight: normal">Required
+</span></i><span style="font-weight: normal">will be initialized
+before </span><i><span style="font-weight: normal">Module</span></i><span style="font-weight: normal">.
+This ordering obviously fails for the modules bound by cyclic
+dependencies.</span></p>
+<h1 class="western"><b>Finite State Machine</b></h1>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+<b>SunRiZe</b> classifies three types of modules :</p>
+<ol>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	Free code without an initializer, that are usually used as libraries
+	or independent pieces of code.</p>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	Module with an initializer, used to define real objects for example
+	a specific timer o serial port that must be initialized.</p>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	The <i>Finite State Machines</i> , used to implements the
+	algorithmic parts running in non-preemptive multitasking .</p>
+</ol>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+In this chapter we discuss the features and the behavior of the
+<b>SunRiZe</b> Finite State Machines.</p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+Each module can include a single <i>Finite State Machine</i> (briefly
+<b>FSM</b>) that is implemented by several attributes and a <i>run</i>
+function.</p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+To insert a <b>FSM</b> into a <b>Module</b> , we need to keeping
+selected the module and then press <i><b>Ins</b></i> . This command
+creates/changes the drawing area to the module local context that is
+the <b>FSM</b>.</p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+The tool-bar also changes to the FSM toolbar.</p>
+<p class="western"><img src="index_html_f72c655b39b98a83.gif" name="Image1" align="left" width="134" height="48" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+Showing the objects that can be placed in the FSM context that are
+respectively :</p>
+<ul>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	States</p>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	Transitions</p>
+	<li/>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+	Branches</p>
+</ul>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+There is another object that is the <i>Initial State</i> which can’t
+be placed because it is unique, non-removable and already present in
+the drawing as a big black spot.</p>
+<p class="western" style="font-variant: normal; font-style: normal; font-weight: normal">
+We can build the FSM starting from this point.</p>
+<h2 class="western" style="border: none; padding: 0cm; background: transparent; page-break-before: auto; page-break-after: avoid">
+States and Transitions</h2>
+<p class="western">A <b>Finite State Machine</b> is essentially
+composed by States and Transitions.<span style="font-variant: normal">
+</span>
+</p>
+<p class="western"><img src="index_html_2326715b584089c8.gif" name="Image2" align="left" width="77" height="56" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western">States are <i>Standalone Objects </i><span style="font-variant: normal"><span style="font-style: normal">and
+can be freely placed and moved on the drawing area, as likes as
+modules.</span></span></p>
+<p class="western"><span style="font-variant: normal"><span style="font-style: normal">A
+machine can walk from a state to another when the related </span></span><span style="font-variant: normal"><span style="font-style: normal"><b>Event</b></span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">happens
+, this is done by placing a </span></span><i>junction</i><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">between
+states that is called </span></span><span style="font-variant: normal"><span style="font-style: normal"><b>Transition</b></span></span><span style="font-variant: normal">
+</span><span style="font-variant: normal"><span style="font-style: normal">.</span></span></p>
+<p class="western"><img src="index_html_217fdcff5f0247a7.gif" name="Image8" align="left" width="249" height="89" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><span style="font-variant: normal"><span style="font-style: normal">In
+</span></span><span style="font-variant: normal"><span style="font-style: normal"><b>SunRize
+</b></span></span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">there
+are 3 types of </span></span></span><span style="font-variant: normal"><span style="font-style: normal"><b>Events
+</b></span></span><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">:</span></span></span></p>
+<h3 class="western" style="margin-left: 1cm; margin-right: 3cm; background: transparent; page-break-before: auto; page-break-after: avoid">
+Conditions</h3>
+<p class="western" style="margin-left: 5cm; margin-right: 3cm; margin-top: 0.3cm; margin-bottom: 0.2cm; background: transparent">
+<img src="index_html_67f7200e894ced61.gif" name="Image9" align="left" width="108" height="35" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western" style="margin-left: 1cm; margin-right: 3cm; margin-top: 0.3cm; margin-bottom: 0.2cm; background: transparent; page-break-before: auto; page-break-after: auto">
+The transition shots when a particular condition is detected. A
+<i>condition</i> is a counter-less situation that is always
+considered.</p>
+<h3 class="western" style="margin-left: 1cm; margin-right: 3cm; background: transparent; page-break-before: auto; page-break-after: avoid">
+Timers</h3>
+<p class="western" style="margin-left: 5cm; margin-right: 3cm; margin-top: 0.3cm; margin-bottom: 0.2cm; background: transparent">
+<img src="index_html_70f7ffd4ac710b6f.gif" name="Image11" align="left" width="92" height="43" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western" style="margin-left: 5cm; margin-right: 3cm"><br/>
+<br/>
+
+</p>
+<p class="western" style="margin-left: 1cm; margin-right: 3cm; font-variant: normal; font-style: normal; font-weight: normal; background: transparent; page-break-before: auto; page-break-after: auto">
+The transition shots after a certain amount of time is passed by the
+last transition.</p>
+<h3 class="western" style="margin-left: 1cm; margin-right: 3cm; background: transparent; page-break-before: auto; page-break-after: avoid">
+Tokens</h3>
+<p class="western" style="margin-left: 5cm; margin-right: 3cm; margin-top: 0.3cm; margin-bottom: 0.2cm; background: transparent">
+<img src="index_html_dd32d7a9a72de0a2.gif" name="Image13" align="left" width="93" height="44" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western" style="margin-left: 5cm; margin-right: 3cm"><br/>
+<br/>
+
+</p>
+<p class="western" style="margin-left: 1cm; margin-right: 3cm; font-variant: normal; font-style: normal; background: transparent; page-break-before: auto; page-break-after: auto">
+The transition shots when someone, somewhere , raise the token or
+call a proper module method which does the same thing.</p>
+<p class="western" style="font-variant: normal; font-style: normal">When
+a transition shots, three blocks of codes are executed in this order
+:</p>
+<p class="western"><img src="index_html_f2fb259cd49f466b.png" name="Image62" align="left" width="393" height="115" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western">These blocks of code are related to the states and
+the transition, we can set them by opening with a double click the
+<i>State Editing Dialog Box</i><span style="font-variant: normal"> </span><span style="font-variant: normal"><span style="font-style: normal">:</span></span></p>
+<p class="western"><img src="index_html_84ee0ec1e2f2a89b.gif" name="Image14" align="left" width="485" height="279">
+  <br clear="left"/>
+</img>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western">And the <i>Transition Editing Dialog Box</i> :</p>
+<p class="western"><img src="index_html_1ae46df424ba8aff.gif" name="Image15" align="left" width="487" height="284">
+  <br clear="left"/>
+</img>
+<br/>
+<br/>
+
+</p>
+<p class="western">In these dialog boxes we can recognize also a
+couple of elements that are :</p>
+<ul>
+	<li/>
+<p class="western">The <b>Do Action</b> associated to the
+	state that is executed continuously in an open loop while the system
+	is remaining in that states.</p>
+	<li/>
+<p class="western">The <b>Guard Condition</b> <span style="font-weight: normal">that
+	is strictly related to the </span><b>Token</b> <span style="font-weight: normal">event
+	and blocks the execution of a transition if the guard is not
+	satisfied.</span></p>
+</ul>
+<h2 class="western" style="margin-left: 3cm; border: none; padding: 0cm; background: transparent; page-break-before: auto; page-break-after: avoid">
+Branches</h2>
+<p class="western" style="margin-top: 0.5cm; margin-bottom: 0.4cm; border: none; padding: 0cm; background: transparent">
+<img src="index_html_5a9b398beb6ae6b6.gif" name="Image16" align="left" width="308" height="186" border="0"/>
+<br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western">A branch is used to change the destination of a
+transition upon a specific condition.</p>
+<p class="western" style="font-weight: normal">In this case for
+example, after 200ms the transition shots but the destination is
+State2 only if i==3 , if i!=3 the default branch (without a
+condition) creates an auto-loop on the State1.</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+</body>
+</html>
