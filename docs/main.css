@@ -1,19 +1,6 @@
 h1 { direction: inherit; color: #0066cc }
-h1.western { font-family: "Calibri" }
-p { direction: inherit }
-p.western { font-family: "Calibri" }
+body { font-family: "Calibri" }
 h2 { margin-top: 0.5cm; margin-bottom: 0.4cm; border: none; padding: 0cm; direction: inherit; font-variant: normal; color: #0066cc; page-break-before: auto; page-break-after: auto }
-h2.western { font-family: "Calibri", sans-serif; font-style: normal }
-h2.cjk { font-family: "Lucida Sans Unicode"; font-size: 14pt; font-style: italic }
-h2.ctl { font-family: "Mangal"; font-size: 14pt; font-style: italic }
-p { direction: inherit }
-p.code-western { margin-bottom: 0in; background: #eeeeee; font-variant: normal; font-family: "Courier New", monospace; font-size: 9pt; font-weight: bold }
-p.code-cjk { margin-bottom: 0in; background: #eeeeee; font-variant: normal; font-size: 9pt; font-weight: bold }
-p.code-ctl { margin-bottom: 0in; background: #eeeeee; font-variant: normal; font-size: 9pt; font-weight: bold }
 h3 { margin-top: 0.3cm; margin-bottom: 0.2cm; direction: inherit; font-variant: normal; color: #0066cc }
-h3.western { font-family: "Calibri", sans-serif; font-style: normal }
-h3.cjk { font-family: "Lucida Sans Unicode" }
-h3.ctl { font-family: "Mangal" }
-li { font-family: "Calibri" }
-
-
+.code { background-color: #c0c0c0 ;font-family:"Courier";font-weight: bold; }
+.reference { background-color: #dcffff}
