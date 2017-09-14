@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <title>6</title>
+  </head>
+  <body>
+    <br>
+    <h1>Running the Code</h1>
+    By generating the Code, we have created four new files in the <b>include</b>
+    and <b>src</b> folders, if we have set up the <i>Arduino</i> IDE
+    with related links, all the code has been generated together in the
+    <i>Arduino</i> folder.<br>
+    <br>
+    Looking at this folder we should see :<br>
+    <b><br>
+    </b>
+    <ul>
+      <li><b> &nbsp;&nbsp;&nbsp; Semaphore.h</b></li>
+      <li><b> &nbsp;&nbsp;&nbsp; Semaphore.c</b></li>
+      <li><b> &nbsp;&nbsp;&nbsp; model.c</b></li>
+      <li><b> &nbsp;&nbsp;&nbsp; tokens.h</b></li>
+    </ul>
+    <br>
+    As we said, every module produces a couple of separated files, that
+    in this case are <i>Semaphore.c </i>and <i>Semaphore.h</i> . In
+    addition to the specific operations and attributes, defined for the
+    module, this code contains a couple of functions named <b>Semaphore_Init()</b>
+    and <b>Semaphore_Run()</b>.<br>
+    <br>
+    These two functions, are collected by two functions stored in <b>model.c</b>
+    and called <b>model_run()</b> and <b>model_init()</b> . The <i>model_init</i>
+    function, collects all the constructors or initialization functions,
+    for the modules which have a <b>FSM</b> or at least the<i> init
+      flag</i> on and the functions are sorted using the DSF algorithm
+    on the dependencies. The <i>model_run </i>collects all the calls
+    to the <b>Run</b> functions of the modules and must be inserted in
+    the typical infinite loop we can find in almost every firmware.<br>
+    <br>
+    Finally there is the <b>tokens.h</b> file that is the include
+    declaration for all the tokens that are always visible to the entire
+    project, without declaring dependencies.<br>
+    <br>
+    This four files<i> are not enough </i>to compile the entire
+    project, we need some file more which can depends from the
+    architecture.<br>
+    <br>
+    <h2>Model / Architecture connections <br>
+    </h2>
+    Each <i>module header</i> file, includes <b>commons.h</b> . <br>
+    <br>
+    We need to create this file, reasoning on the required libraries and
+    the architecture required to run our project.<br>
+    A good <i>commons.h</i> for this project based on <i>Arduino 1</i>
+    architecture should be :<br>
+    <br>
+    <br>
+    <pre class="western"><font color="#004a43">#ifndef __SUNRIZE_COMMONS__</font>
+<font color="#004a43">#define __SUNRIZE_COMMONS__</font>
+
+<font color="#000000"><font color="#004a43">#include </font><font color="#800000">"</font><font color="#40015a">Arduino.h</font><font color="#800000">"</font></font>
+<font color="#000000"><font style="font-size: 12pt" size="3"><font color="#004a43">#define </font><font color="#004a43">time_ref millis</font></font></font>
+<font color="#000000"><font style="font-size: 12pt" size="3"><b><font color="#004a43">#include </font><font color="#800000">"</font><font color="#40015a">defines.h</font><font color="#800000">"</font></b></font></font>
+
+<font color="#000000"><font color="#004a43">#endif </font><font color="#696969">/*__SUNRIZE_COMMONS__*/</font></font></pre>
+    Essentially we include the <i>Arduino.h</i> file but we also
+    include 2 lines of code one <b>#define</b> and one <b>#include</b>
+    of the <b>defines</b><b>.h</b> file.<br>
+    <br>
+    <b>time_ref </b>must be the name of the function returning the
+    system time in <b>milliseconds </b>as <b>unsigned </b><b>long</b>
+    format. Fortunately this function is already present in the <i>Arduino</i>
+    system and it is called <b>millis</b> . <br>
+    <br>
+    It is not relevant when the timer started, if referred to the EPOCH
+    or the switch on of the micro, the only relevant thing is that must
+    be and unsigned long, based on milliseconds and obviously monotonic.<br>
+    <br>
+    We will use the two complements arithmetic to prevent the counter
+    overflow, so that, with the typical unsigned long at 32 bit we have
+    2^31 milliseconds that are around 24 days and 20 hours, that is the
+    maximum waiting time on a timer.<br>
+    <br>
+    Other architectures, does not have a unified solution, and this
+    function can be not-existent into the libraries, because requires to
+    set a timer and the timer, can depend by the oscillator frequency
+    and can be unaligned with the milliseconds. All these problem could
+    be resolved in external pieces of code that can be included into the
+    project.<br>
+    <br>
+    <h2>Defines</h2>
+    The <b>Defines </b>is usually an architecture independent files.
+    In order to offer the best flexibility many part of the produced
+    code are resolved with defines that are included in this files.<br>
+    <br>
+    This is usually what you need to include :<br>
+    <br>
+    <pre class="western" style="font-weight: normal"><font color="#004a43">#ifndef __SUNRIZE_DEFINES__</font>
+<font color="#004a43">#define __SUNRIZE_DEFINES__</font>
+
+<font color="#000000"><font color="#004a43">#define TIMER_DEFINITION</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">)</font><font color="#004a43"> unsigned long timer</font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#define TIMER_RESET</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">)</font><font color="#004a43"> timer</font><font color="#808030">=</font><font color="#004a43">time_ref</font><font color="#808030">();</font></font>
+<font color="#000000"><font color="#004a43">#define TIMER_FOLLOW</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">,</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#004a43"> timer</font><font color="#808030">+=</font><font color="#808030"> </font></font><font color="#000000"><font color="#808030"><font color="#000000"><font color="#808030">(</font><font color="#004a43">long</font><font color="#808030">) </font></font>(</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#define TIMER_TIMEOUT</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">,</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#004a43"> if</font><font color="#808030">((</font><font color="#004a43">long</font><font color="#808030">)</font><font color="#004a43">time_ref</font><font color="#808030">()-(</font><font color="#004a43">long</font><font color="#808030">)</font><font color="#004a43">timer</font><font color="#808030">&gt;=(</font><font color="#004a43">long</font><font color="#808030">)(</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#808030">)</font></font>
+
+<font color="#000000"><font color="#004a43">#define TOKEN_REFERENCE</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">)</font><font color="#004a43"> extern volatile unsigned token</font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#include </font><font color="#800000">"</font><font color="#40015a">tokens.h</font><font color="#800000">"</font></font>
+<font color="#000000"><font color="#004a43">#define TOKEN_DEFINITION</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">)</font><font color="#004a43"> volatile unsigned token </font><font color="#808030">=</font><font color="#004a43"> 0 </font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#define TOKEN_SIGNAL_DEFINITION</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">)</font><font color="#004a43"> static volatile unsigned token</font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#define TOKEN_CHECK</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">)</font><font color="#004a43"> if </font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">&gt;</font><font color="#004a43">0</font><font color="#808030">)</font></font>
+<font color="#000000"><font color="#004a43">#define TOKEN_RAISE</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">)</font><font color="#004a43"> token</font><font color="#808030">++;</font></font>
+<font color="#000000"><font color="#004a43">#define TOKEN_USE_LIMIT</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">,</font><font color="#004a43">limit</font><font color="#808030">)</font><font color="#004a43"> token</font><font color="#808030">=((</font><font color="#004a43">token</font><font color="#808030">&lt;(</font><font color="#004a43">limit</font><font color="#808030">))</font><font color="#004a43"> </font><font color="#808030">?</font><font color="#004a43"> token </font><font color="#808030">:</font><font color="#004a43"> </font><font color="#808030">(</font><font color="#004a43">limit</font><font color="#808030">)</font><font color="#004a43"> </font><font color="#808030">)-</font><font color="#004a43">1</font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#define TOKEN_USE</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">)</font><font color="#004a43"> </font><font color="#808030">--</font><font color="#004a43">token</font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#define TokenRaise</font><font color="#808030">(</font><font color="#004a43">x</font><font color="#808030">)</font><font color="#004a43"> TOKEN_RAISE</font><font color="#808030">(</font><font color="#004a43">Token_</font><font color="#808030">##</font><font color="#004a43">x</font><font color="#808030">)</font></font>
+
+<font color="#000000"><font color="#004a43">#define TRACE_STATE</font><font color="#808030">(</font><font color="#004a43">x</font><font color="#808030">,</font><font color="#004a43">y</font><font color="#808030">)</font><font color="#004a43"> </font></font>
+<font color="#000000"><font color="#004a43">#define TRACE_FUNCTION</font><font color="#808030">(</font><font color="#004a43">x</font><font color="#808030">,</font><font color="#004a43">y</font><font color="#808030">)</font></font>
+
+<font color="#004a43">#endif </font><font color="#696969">/*__SUNRIZE_DEFINES_*/</font></pre>
+    <br>
+    Everything is used by the system, except for the <b>TokenRaise(</b><b><i>name</i></b><b>)
+    </b>define that can be used to raise a token for a transition .<br>
+    <br>
+    Note that this files includes <i>tokens.h</i> , and it is included
+    by <i>commons.h </i>that is included by each module, so the tokens
+    have a global visibility.<br>
+    <br>
+    <br>
+    <h2>The main file</h2>
+    Finally we need to define the <b>Main File</b> .<br>
+    <br>
+    As we know a typical <i>firmware</i> is composed by the
+    hardware/software initialization phase and an infinite loop where
+    things are done.<br>
+    <br>
+    In <b>model.c </b>we already have everything the model requires to
+    run properly, that are the two functions :<br>
+    <br>
+    <pre class="western"><font color="#800000"><b>void</b></font><font color="#000000"> model_init</font><font color="#808030">()</font><font color="#800080">;</font>
+<font color="#000000"><font color="#800000"><b>void</b></font> model_run<font color="#808030">()</font><font color="#800080">;</font></font></pre>
+    Obviously, if you need for example to initialize something else
+    (liker the timer interrupt for the time base), you will need to
+    initialize the related code too.<br>
+    <br>
+    Optionally you can define this functions, directly into you code or
+    create an <i>include file</i> like this.<br>
+    <br>
+    <b>model.h</b><br>
+    <pre class="western" style="font-weight: normal"><font color="#004a43">#ifndef MODEL_H</font>
+<font color="#004a43">#define MODEL_H</font>
+<font color="#000000"><font color="#800000"><b>extern</b></font> <font color="#800000">"</font><font color="#0000e6">C</font><font color="#800000">"</font> <font color="#800080">{</font></font>
+<font color="#000000"><font color="#800000"><b>void</b></font> model_init<font color="#808030">()</font><font color="#800080">;</font></font>
+<font color="#000000"><font color="#800000"><b>void</b></font> model_run<font color="#808030">()</font><font color="#800080">;</font></font>
+<font color="#800080">}</font>
+<font color="#004a43">#endif </font><font color="#696969">/*MODEL_H*/</font></pre>
+    <br>
+    Then, with a "<i>normal</i>" compiler and IDE you need a <b>main</b>
+    entry point which you can define in a <b>main.c</b> file :<br>
+    <br>
+    <b>main.c / main.cpp</b><br>
+    <pre class="western" style="font-weight: normal"><font color="#000000"><font color="#004a43">#include </font><font color="#800000">"</font><font color="#40015a">model.h</font><font color="#800000">"</font></font>
+<font color="#000000"><font color="#800000"><b>int</b></font> <font color="#400000">main</font><font color="#808030">()</font></font>
+<font color="#800080">{</font>
+<font color="#000000">  model_init<font color="#808030">()</font><font color="#800080">;</font></font>
+<font color="#000000">  <font color="#800000"><b>while</b></font><font color="#808030">(</font><font color="#008c00">1</font><font color="#808030">)</font> </font>
+<font color="#000000">  <font color="#800080">{</font></font>
+<font color="#000000">    model_run<font color="#808030">()</font><font color="#800080">;</font></font>
+<font color="#000000">  <font color="#800080">}</font></font>
+<font color="#000000">  <font color="#800000"><b>return</b></font> <font color="#008c00">0</font><font color="#800080">;</font></font>
+<font color="#800080">}</font></pre>
+    <br>
+    The <i>Arduino</i> architecture instead hides the main inside the
+    library code and the implementation is a little different :<br>
+    <br>
+    <p><b>Ardu</b><b>ino</b><b>.ino</b></p>
+    <pre class="western" style="font-weight: normal"><font color="#000000"><font color="#004a43">#include </font><font color="#800000">"</font><font color="#40015a">model.h</font><font color="#800000">"</font></font>
+
+<font color="#000000"><font color="#800000"><b>void</b></font> setup<font color="#808030">()</font></font>
+<font color="#800080">{</font>
+<font color="#000000">  model_init<font color="#808030">()</font><font color="#800080">;</font></font>
+<font color="#800080">}</font>
+
+<font color="#000000"><font color="#800000"><b>void</b></font> loop<font color="#808030">()</font></font>
+<font color="#800080">{</font>
+<font color="#000000">  model_run<font color="#808030">()</font><font color="#800080">;</font></font>
+<font color="#800080">}</font></pre>
+    <br>
+    <br>
+    Then opening the <i>Arduino IDE</i><b>,</b> all the files included
+    in the directory will be loaded automatically :<br>
+    <br>
+    <img src="cc1.png" alt="" width="258" hspace="50" height="310"
+      align="left"><br>
+    <br>
+    At this point, you should know what to do with the <b>IDE</b> :
+    update the project to the hardware and <b>the semaphore</b><b>
+      works !<br>
+      <br>
+      <br>
+      <img src="cc2.png" alt="" width="400" hspace="30" height="302"><br>
+    </b><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>4</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body>
+    <h1> Learning by Example</h1>
+    <br>
+    This document follows the “Learning by Example” rules. We will start
+    with an example, trying to details everything, defining the default
+    model and how does it run.<br>
+    <br>
+    Our example is based on the Arduino architecture and the related
+    code editor.<br>
+    <br>
+    I opted for Arduino instead of a AT48, or a PIC24FJ128 because you
+    have probably already heard of it, due to the fact that is an
+    immediate platform, ready to be programmed everywhere with an USB,
+    largely used for hobby and unprofessional works.<br>
+    <br>
+    Anyway if your micro supports at least a C-99 compliant compiler,
+    this model should work like a charm. I used previous versions of <b>SunRize</b>
+    to develop several professional works from 8 to a 32 bit CPU.<br>
+    <br>
+    <div class="reference"> The evidenced rows, represent the real
+      reference documentation indicating the model structure and the
+      tool usage. </div>
+    <br>
+    <br>
+    <h2> Requirements</h2>
+    <br>
+    <b>SunRiZe</b> is a programmers tools, so this document uses a
+    technical language.<br>
+    <br>
+    In order to read and understand this document, you should know at
+    least:<br>
+    <br>
+    <ul>
+      <li>The C language</li>
+      <li>The basic rules of Micro Controllers programming and
+        elementary hardware.</li>
+    </ul>
+    <br>
+    If you know that, we can proceed.<br>
+    <br>
+    <br>
+    <h1> Building a traffic semaphore</h1>
+    <h2> Arduino and SunRiZe</h2>
+    As you probably know the Arduino 1 architecture is based on a AVR
+    micro processor (ATmega328) with a specific PCB an a (strange) IDE.<br>
+    <br>
+    As we said, <b>SunRiZe</b> is not specifically designed for Arduino
+    , it is designed to realize projects with a proper make file and a
+    complete tool-chain, with multiple program files and compiled
+    libraries.<br>
+    <br>
+    The simplified paradigm that <b>is not UML</b> is designed to
+    produce <b>C</b> code and not <b>C++</b>, because it is expressly
+    designed for small micro, when you don’t even have a dynamic memory
+    manager and in this case, I found the C++ underused, heavy and
+    unnecessarily complicated.<br>
+    <br>
+    If you don’t have an Arduino piece of hardware, I suggest you to
+    make or buy one, after all is Open Hardware.<br>
+    <br>
+    <h2> A bit of bit</h2>
+    For people who does not know exactly Arduino is made, on a side it
+    has a classic 0.1 inches connector with 14 IO ports exposed.<br>
+    <br>
+    The first 8 ports, from 0 to 7 are connected to the PORTD , while
+    the ports from 8 to 13, are connected to the first 6 bit (0-5) of
+    the PORTB of an AVR cpu, usually ATmega328.<br>
+    <br>
+    At the moment we will use these 3 registers of <i>Arduino</i> :<br>
+    <br>
+    <ul>
+      <li><b>PORTD</b> output D</li>
+      <li><b>PIND</b> input D</li>
+      <li><b>DDRD</b> Data Direction Register D (1 output, 0 input)</li>
+    </ul>
+    <br>
+    We need to build a simplified semaphore, so we will connect six <b>LED</b>
+    to the input port, Red, Yellow and Green. In order to mark the
+    different directions, we will call them <b>D</b> (as direct) and <b>C</b>
+    (as cross), the resulting connection to the <b>PORT D</b> follow
+    this order :<br>
+    <br>
+    <img src="aa1.png" alt="" width="400" hspace="50" height="341"
+      align="left"><br>
+    <br>
+    <br>
+    <b>PORTD</b><br>
+    <table width="30%" border="2">
+      <tbody>
+        <tr>
+          <td valign="top"><b>7</b><b><br>
+            </b></td>
+          <td valign="top"><b>6</b><b><br>
+            </b></td>
+          <td valign="top"><b>5</b><b><br>
+            </b></td>
+          <td valign="top"><b>4</b><b><br>
+            </b></td>
+          <td valign="top"><b>3</b><b><br>
+            </b></td>
+          <td valign="top"><b>2</b><b><br>
+            </b></td>
+          <td valign="top"><b>1</b><b><br>
+            </b></td>
+          <td valign="top"><b>0</b><b><br>
+            </b></td>
+        </tr>
+        <tr>
+          <td valign="top">NA<br>
+          </td>
+          <td valign="top">NA<br>
+          </td>
+          <td valign="top">GD<br>
+          </td>
+          <td valign="top">YD<br>
+          </td>
+          <td valign="top">RD<br>
+          </td>
+          <td valign="top">GC<br>
+          </td>
+          <td valign="top">YC<br>
+          </td>
+          <td valign="top">RC<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h2> Running SunRiZe</h2>
+    <br>
+    If you have a compiled version of <b>SunRiZe</b> you will probably
+    have a folder with and executable, some library (if any) and a file
+    named <b>GenCode.js</b> that is the <i>Javascript Code Generator</i>.<br>
+    <br>
+    The location of these file does not matter because <b>SunRiZe</b>
+    will start everything from its folder.<br>
+    <br>
+    We need to create a folder project separately as previously
+    indicated in Documents (where we do prefer). We are creating a
+    traffic semaphore, so we can name the folder "<b>Semaphore</b>" with
+    the subfolder <i>Arduino</i> and the links as previously indicated.<br>
+    <br>
+    Now we can click and run the <b>SunRiZe </b>executable :<br>
+    <br>
+    <img src="aa2.png" alt="" width="407" hspace="20" height="263"
+      align="left">At first we can open the drop down menu “File” and
+    then click Project :<br>
+    <br>
+    <img src="aa3.png" alt="" width="130" hspace="20" height="171"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    The <i>folder choice dialog box</i> is opening and we can select
+    the “<b>Semaphore</b>” folder we have previously created, accepting
+    to create a new model inside.<br>
+    <br>
+    After selecting the project folder, we can Save the project and the
+    file "<b>model.srz</b>" will be placed into it.<br>
+    <br>
+    The next time we select the folder the project will be loaded
+    automatically.<br>
+    <br>
+    <div class="reference"><b>Reload</b> is used to restore the project
+      to the last saved state, if
+      we have done something wrong : this action will delete the current
+      changes to the latest Save.<br>
+    </div>
+    <br>
+    We are ready to design our first module now.<br>
+    <br>
+    <br>
+    <br>
+  </body>
+</html>
