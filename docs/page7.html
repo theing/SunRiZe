@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <title>7</title>
+  </head>
+  <body>
+    <h1>Branches and conditions</h1>
+    <h2>Night and Day<br>
+    </h2>
+    <img src="bb23.png" alt="" width="298" hspace="50" height="171"><br>
+    <br>
+    This is the traffic semaphore we have previously defined in the
+    module <b>Semaphore</b> .<br>
+    <br>
+    Now we will introduce a <i>Night/Day</i> switch that is an external<i>
+      timer </i>with a contact, <b>NO</b>/day and <b>NC</b>/night.<br>
+    <br>
+    We will connect this timer between the pull-up input we set for the
+    <b>port 7</b> of the <i>Arduino</i> hardware, that is the <b>PORTD
+      6</b>.<br>
+    <br>
+    During the night the original state of the <b>Semaphore</b> is
+    suspended, and the <b>yellow light</b><b>s</b> flash on both side
+    to indicate a potentially dangerous situation.<br>
+    <br>
+    <br>
+    <img src="dd1.png" alt="" width="457" hspace="50" height="433"
+      align="left">We can do that by introducing two more states <b>YFlashOff</b>
+    and <b>YFlashOn</b> .<br>
+    <br>
+    In <b>YFlashOff </b>all the lights are switched off :<br>
+    <br>
+    <pre class="western" style="background: #ffffff"><font color="#000000"><font color="#696969">/* Bit X X </font><font color="#696969">G</font><font color="#696969">D YD </font><font color="#696969">R</font><font color="#696969">D </font><font color="#696969">G</font><font color="#696969">C YC </font><font color="#696969">R</font><font color="#696969">C */</font></font>
+<font color="#000000"><span style="font-style: normal"><span style="font-weight: normal">PORTD</span></span><font color="#808030"><span style="font-style: normal"><span style="font-weight: normal">=</span></span></font><span style="font-style: normal"><span style="font-weight: normal">B11000000</span></span><font color="#800080"><span style="font-style: normal"><span style="font-weight: normal">;<br><br><br></span></span></font></font></pre>In <b>YFlashOn </b>instead both the yellow light are on :<br><br><pre class="western" style="background: #ffffff"><font color="#000000"><font color="#696969">/* Bit X X </font><font color="#696969">G</font><font color="#696969">D YD </font><font color="#696969">R</font><font color="#696969">D </font><font color="#696969">G</font><font color="#696969">C YC </font><font color="#696969">R</font><font color="#696969">C */</font></font>
+<font color="#000000"><span style="font-style: normal"><span style="font-weight: normal">PORTD</span></span><font color="#808030"><span style="font-style: normal"><span style="font-weight: normal">=</span></span></font><span style="font-style: normal"><span style="font-weight: normal">B11010010</span></span><font color="#800080"><span style="font-style: normal"><span style="font-weight: normal">;</span></span></font></font></pre><br>Two <i>Timed Transitions</i> are used to create a simple flashing loop.<br><br><br><p><br></p><p><br></p><p><br></p><p><br></p><p>This time, we will put the code directly as <i>Entry Action</i> of the states instead of the transition action.<br><br></p><img src="dd2.png" alt="" width="388" hspace="50" height="223" align="left"><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p><p><br>Well. Now the problem is to connect the new piece of machine to the old one with an <b>entering transition</b> and an <b>exiting transition</b>.<br></p><p>We will act between the <b>GDir </b>and <b>YDir</b> by removing the transition and replacing it with a <b>Branch</b> :<img src="dd4.png" alt="" width="32" hspace="20" height="32" align="middle"><br></p><div class="reference"><b>Note :</b> to remove the transition as well as each
+  other object in a context, you have to keep selected it pressing the
+  <i>left mouse key</i> and at the same time, pressing <b>Del</b><span style="font-weight: normal">.</span></div><br>The <b>Branch </b>is a standalone object (not primary) which changes the logic of the code generation, by introducing conditions<i>.<br></i><img src="dd3.png" alt="" width="172" hspace="50" height="131" align="left"><p>After we have placed the <b>Branch</b> (that does not have properties) , we can complete everything by adding an entry transitions, timed as the previous one and with the same parameters, from <b>GDir</b> to the <b>Branch</b>.&nbsp; <br></p><p>The conditions stay in the exiting transitions from the <b>Branch</b> to the destinations.<br></p><p><br></p>In this case, we can place two different exiting transitions from the <b>Branch</b> : the first one to <b>YDir</b> and the second one to <b>YFlashOn</b> .<br><br>A double click on the <b>Transition</b> connecting the <b>Branch&nbsp; </b>to the <b>YFlashOn</b> , and the related <i>Editing Dialog Box</i> will open :<br><br><img src="dd5.png" alt="" width="418" hspace="50" height="244" align="left">This dialog tell us that transitions exiting from a branch,&nbsp; <b>are not real transition</b><b>s</b> because they do not have a trigger. In facts, the trigger, but are executed under a <i>Guard Condition</i> which means, if and only if the condition is satisfied. In this case we place this condition :<br><br><b>! (PIND&amp;0x40)<br><br></b>That means only if the <b>PIND 6 BIT is 0</b> that means that the pull-up is forced to ground by the external clock.<br><br>The <i>Transition</i> connecting the <b>Branch </b>to the <b>YDir</b> can be leaved <i>empty</i> , in this case it will be the <i>default transition</i> acting only if no other conditions are satisfied in any way.<br><br><br><br><br><div class="reference">A <b>Branch</b> is a cross-point which can have <b>more</b>
+entering lines and <b>one</b> or <b>more</b> exiting line.<br>
+<p>The <b>entry line</b><b>s</b> are regular <b>Transitions</b> shot
+  by some kind of event and coming also from different states. The <b>exiting
+    lines</b>, are not regular transitions, you can call it <i>Branches
+  </i>if you want, because they have not a connected event, but only
+  different <b>correlated or uncorrelated </b>conditions that brings
+  to different States.<br>
+  <br>
+  This <b>conditions</b> are expressed by setting the field <i>Guard
+    Condition</i>. If an <b>exiting line</b> has <b>no condition</b>,
+  it is called <b>default or else</b>, and it is executed only if all
+  the other conditions fail.<br>
+  <br>
+  Both, the <b>entering Transitions</b> and the <b>exiting Branches</b>
+  can have an associated <b>Action</b>, in this case <b>Transitions</b>,
+  are executed immediately when the event happens, while the winning <b>Branch</b>
+  is executed only if its condition is true.<br>
+  <br>
+  <b>Note:</b> You can have several conditioned and only one default
+  condition, but if the conditions are uncorrelated the result is
+  unpredictable, because only the first branch meeting the right
+  condition is traveled. In this case you need to modify the model and
+  create a <i>Cascade of Conditions</i> to be sure your result is
+  determinable.</p></div>An interesting effect of putting the code directly into the <i>Entry Action</i> of the states, instead of the <i>Transition</i> is that the code indicated in <b>YFlashOn</b> will be <i>repeated</i> and the yellow lights will be switched on immediately after the <b>GDir</b> time has gone, as well as in the returning transitions from <b>YFlashOff</b> .<br><br><br><br><img src="dd6.png" alt="" width="495" hspace="50" height="396" align="left">Now that we have the entering situation we can define an exit situation and in this case we will use a <i>shortcut</i>.<br><br>In facts , by definition, a <i>Timed Transition</i> works as <i>Timeout</i> . If this <i>Timeout</i> is undetermined or too short, is better to use a branch to be sure that the things are done in the right order. If the timeout is relatively <i>long</i> you can parallelize the exiting transition from a state with a <i>Conditioned Transition </i>or <i>Token Transition</i> too. <br><br>Usually the normal use of the <i>Timed Transitions</i> is just to be used as a timeout for other events to bring the system in a stable and safe state, if the event does not occur.<br><br>If we use the exiting transition from <b>YFlashOff</b> as timeout we can introduce a new<i> </i><b>Conditioned Transition</b><i> .</i><br><br><br>
+
+<p><br><br></p><p><br></p><p><br></p><p><br></p><p>We can connect <b>YFlashOff</b> directly to <b>GCross</b> with a transition and use the related dialog box to compile this condition :<br></p><img src="dd7.png" alt="" width="456" hspace="50" height="266" align="left"><p><br>Note that in the other part of the model, we placed the code directly on the transition, so the code is never replicated automatically and must be defined for each<i> transition</i>.<br></p><p>The condition is the opposite of the previous one it <i>shots</i> immediately when in the state <b>YFlashOff </b>detects that the timer opens, or at most two seconds after if it is too late.</p><br><br><br><br><br><br><br><br><br>
+<p>
+</p><div class="reference">
+<b>Note: </b>the main difference between this method and the <b>Branch</b>
+  placed above, is that the the <b>Branch</b> works only <i>at the
+    moment the main transition</i> <i>shots</i>, while the <b>Conditioned
+    Transition</b> works for the whole time the machine remains in <b>YFlashOff</b>.</div><br>The resulting model is :<br><br><img src="dd8.png" alt="" width="452" hspace="50" height="362"><br><br><br>
+And now you can <b>Generate the Code</b> , <i>upload it </i>on <i>Arduino</i>
+but before running it, you can simulate the external timed switch with a
+simple wire wrapped to the pin 7 of the <i>Arduino </i>connector to
+the <i>Ground</i>.<br><br>
+<br>
+<img src="dd9.png" alt="" width="354" hspace="40" height="304" align="left"> <i>When the wire is connected to the ground, after the Green on Main Direction the semaphore begins to flash, until the wire is removed.</i><br>
+<br>
+<br>
+Obviously you are strongly encouraged to take a look at the generated
+code, to better understand as the branches are managed by <b>SunRiZe</b>.<br>
+<br>
+<br>
+<p><br>
+</p>
+
+<p><br></p><p><br></p><p><br><br></p></body></html>
