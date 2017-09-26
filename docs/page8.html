@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>8</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body>
+    <h1> Multitasking</h1>
+    <h2>A pedestrian Semaphore</h2>
+    <p>In this chapter, we show how modules, can coexist and run
+      separately at the same time, in the same program.</p>
+    <p>We will design a new semaphore on the <b>PORTB</b> of the <i>Arduino</i>
+      hardware, using the pin 8 and 9.<br>
+    </p>
+    <p>This semaphore is a bit different from the other one, it has only
+      two lights, RED and GREEN, normally RED. When the pedestrian press
+      a button the semaphore become GREEN for a while and then it lamps
+      GREEN for another while until the next RED.<br>
+    </p>
+    <p><b>Note :</b> At the moment we build a semaphore that is <i>independent</i>
+      by the previous one.<br>
+    </p>
+    <h2>The pedestrian button</h2>
+    <p>The <b>PIN 8 </b>of the <i>Arduino </i>hardware is connected
+      to the <b>BIT 7</b> of the <b>D</b> port that is pull-up. We
+      never used this input so we will try to use it as a pedestrian
+      button, forcing the pin to ground.<br>
+      &nbsp;<br>
+      As the port <b>D</b> is completely managed by the previous<b>
+        Semaphore</b> module, we will create a special function to ask
+      the module if someone is pressing this button : we call this
+      function : <b>pedestrianPressed</b> .<br>
+      <br>
+      So we can click twice on the <b>Semaphore</b> module (in the main
+      context), and go to the <i>Operation</i> tab :</p>
+    <p><br>
+    </p>
+    <img src="ee1.png" alt="" width="438" hspace="50" height="309"
+      align="left">
+    <div class="reference"> The <b>pedestrianPressed</b> function is <i>Public</i>
+      so it is callable by the other modules as : <b>Semaphore_pedestrianPressed()</b>.
+      <br>
+      <br>
+      At this point, we need to regenerate the code and then, take our
+      preferred editor and insert the code between the <i>Code
+        Preservation Keys</i> as explained in the <i>Code </i>chapter.<br>
+      <br>
+    </div>
+    <pre class="western" style="font-style: normal"><font color="#3f5fbf"><br><br><br></font><font color="#3f5fbf"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>/**</font>
+<font color="#3f5fbf"> * The Pedestrian Button checker</font>
+<font color="#3f5fbf"> * @return 0 if pressed 0x80 if not.</font>
+<font color="#3f5fbf"> */</font>
+<font color="#000000">byte pedestrianPressed<font color="#808030">(</font>  <font color="#808030">)</font></font>
+<font color="#800080">{</font>
+<font color="#000000">TRACE_FUNCTION<font color="#808030">(</font>Semaphore<font color="#808030">,</font>pedestrianPressed<font color="#808030">)</font></font>
+<font color="#696969">/*@@+pedestrianPressed_code*/</font>
+<font color="#000000"><font style="font-size: 12pt" size="3"><b><font color="#800000">return</font> <font color="#808030">(</font>byte<font color="#808030">)</font> <font color="#808030">(</font>PIND<font color="#808030">&amp;</font><font color="#008000">0x80</font><font color="#808030">)</font><font color="#800080">;</font></b></font></font>
+<font color="#696969">/*@@-pedestrianPressed_code*/</font>
+<font color="#800080">}</font></pre><br><h2>Bit again</h2><br>Another Bit of Bit<br><br>We connect the pedestrian button to the 7th bit of the <b>D</b> port but we need a couple of BIT more to switch on and off the <b>Red</b> and <b>Green</b> semaphore light. <br><br>To do this,&nbsp; we use the first <b>2 </b><b>BIT</b> of the<b> B</b><b> PORT</b> according to the following table :<br><br><br><b>PORTB</b><br><br><table width="360" cellspacing="2" cellpadding="2" border="0"><tbody><tr><td valign="top">7<br></td><td valign="top">6<br></td><td valign="top">5<br></td><td valign="top">4<br></td><td valign="top">3<br></td><td valign="top">2<br></td><td valign="top">1<br></td><td valign="top">0<br></td></tr><tr><td valign="top">NA<br></td><td valign="top">NA<br></td><td valign="top">NA<br></td><td valign="top">NA<br></td><td valign="top">NA<br></td><td valign="top">NA<br></td><td valign="top">RP<br></td><td valign="top">GP<br></td></tr></tbody></table><br>Where RP is the RED lamp and GP the green one.<br><br><br><br><h2>The Pedestrian Module</h2><br>In the main context, we have the old <b>Semaphore</b> module with the latest modifications :<br><br><img src="ee2.png" alt="" width="149" hspace="100" height="156"><br><br>In the same way we can create another module called <b>Pedestrian</b> :<br><br><img src="ee3.png" alt="" width="128" hspace="100" height="178" align="left"><br>This module definess two times : <b>timeGP</b> and <b>timeYP</b> that are <i>time green pedestrian</i> and <i>time yellow pedestrian</i>.<br><br>The idea is that when we press the button the pedestrian semaphore will change from <i>red</i> to <i>green</i> waiting for <b>timeGP</b>, then it will flashes rapidly for a small amount of time (<b>timeYP</b>) to return red at the end.<br><br>To do this we can use the <b>PORTB</b> that will be initialized directly in Pedestrian with a support private function to manage the lights.<br><br><br><br><br>The managing functions is called <b>setLight()</b> and defined as follows :<br><br><img src="ee4.png" alt="" width="375" hspace="50" height="264" align="left">It is private because not other modules need to interact with the pedestrian semaphore, that is independent.<br><br>As you can see we introduce a parameter here called <b>light</b> that is a byte.<br><br><br><br><br><br><br><br><br><br><br><br>After generating the code again, we should see a new couple of files <b>.c </b>and <b>.h</b> called <b>Pedestrian</b>.<br><br>In <b>Pedestrian.c</b> insert the related code :<br><br><pre class="western" style="font-weight: normal"><font color="#3f5fbf">/**</font>
+<font color="#3f5fbf"> * Setting the light for pedestrian semaphore.</font>
+<font color="#3f5fbf"> * @param 0 off, 1 green, 2 red.</font>
+<font color="#3f5fbf"> */</font>
+<font color="#000000"><font color="#800000"><b>static</b></font> <font color="#800000"><b>void</b></font> setLight<font color="#808030">(</font> byte light <font color="#808030">)</font></font>
+<font color="#800080">{</font>
+<font color="#000000">TRACE_FUNCTION<font color="#808030">(</font>Pedestrian<font color="#808030">,</font>setLight<font color="#808030">)</font></font>
+<font color="#696969">/*@@+setLight_code*/</font>
+<font color="#000000"><font style="font-size: 12pt" size="3"><b><font color="#800000">if</font> <font color="#808030">(</font>light<font color="#808030">&gt;</font><font color="#008c00">2</font><font color="#808030">)</font> <font color="#800000">return</font><font color="#800080">;</font></b></font></font>
+<font color="#000000"><font style="font-size: 12pt" size="3"><b>PORTB <font color="#808030">&amp;=</font> <font color="#808030">~</font><font color="#008c00">3</font><font color="#800080">;</font></b></font></font>
+<font color="#000000"><font style="font-size: 12pt" size="3"><b>PORTB <font color="#808030">|=</font> light<font color="#800080">;</font></b></font></font>
+<font color="#696969">/*@@-setLight_code*/</font>
+<font color="#800080">}</font></pre><br><h3>Pedestrian FSM</h3><br>The Pedestrian FSM could be something like :<br><br><img src="ee5.png" alt="" width="370" hspace="50" height="255"><br><br>The <b>Init</b> transition contains :<br><pre class="western"><font color="#000000"><b>DDRB</b><font color="#808030">=</font>B00000011<font color="#800080">;</font></font>
+<font color="#000000"><font color="#800080"><br></font></font></pre>To set the direction port.<br><br>The <br><pre class="western"><font color="#000000">setLight<font color="#808030">(</font><font color="#008c00">2</font><font color="#808030">)</font><font color="#800080">;<br></font></font></pre>command can be inserted as entry action of the <i>WaitingButton </i>state and places the <b>RED</b> light on the pedestrian semaphore.<br><br>When the button is pressed the related transition <i>shots</i> and executes :<br><pre class="western" style="margin-bottom: 0.5cm; background: #ffffff"><font color="#000000"><span style="font-weight: normal">setLight</span><font color="#808030"><span style="font-weight: normal">(</span></font><font color="#008c00"><span style="font-weight: normal">1</span></font><font color="#808030"><span style="font-weight: normal">)</span></font><font color="#800080"><span style="font-weight: normal">;<br><br></span></font></font></pre>After <b>timeGP</b> the <i>Pedestrian</i> enters in a loop between <b>GOff</b> and <b>GOn</b> that makes the semaphore blink.<br><br>We use another strategy here instead of a timeout, making a <i>count</i> loop of <b>timeYP</b> divided by the single blink time, obviously<b> GOff</b> is :<font color="#000000"><span style="font-weight: normal"> setLight</span></font><font color="#808030"><span style="font-weight: normal">(</span></font><font color="#008c00"><span style="font-weight: normal">0</span></font><font color="#808030"><span style="font-weight: normal">)</span></font><font color="#800080"><span style="font-weight: normal">;</span></font> and <b>GOn</b> is : <font color="#000000"><span style="font-weight: normal">setLight</span></font><font color="#808030"><span style="font-weight: normal">(</span></font><font color="#008c00"><span style="font-weight: normal">1</span></font><font color="#808030"><span style="font-weight: normal">)</span></font><font color="#800080"><span style="font-weight: normal">;</span></font><br><br>Then we need a couple of things more a :<br><pre class="western"><font color="#000000">counter<font color="#808030">=</font><font color="#008c00">0</font><font color="#800080">;</font></font></pre>to be placed as action of the outgoing transition from <i>Green</i> and a :<br><pre class="western"><font color="#000000"><font color="#808030"><span style="font-weight: normal">++</span></font><span style="font-weight: normal">counter</span><font color="#800080"><span style="font-weight: normal">;</span></font></font></pre>as action of the transition between <b>GOn</b> and the <i>Branch</i>.<br><br>One <i>Branch</i> condition is <i>default</i> the other one is conditioned by :<font color="#000000"><span style="font-weight: normal"> counter</span><font color="#808030"><span style="font-weight: normal">&lt;</span></font><span style="font-weight: normal">timeYP</span><font color="#808030"><span style="font-weight: normal">/</span></font><font color="#008c00"><span style="font-weight: normal">1000</span></font></font> the resulting behavior is not precise but the precision is not a requirement here.<br><br><h1>Dependency</h1><p>We miss something in the pedestrian example.<br></p><p>In facts we call a function <i>Semaphore_pedestrianPressed ( )</i> , without including the header file<i> </i>of <b>Semaphore</b> into <b>Pedestrian</b> . Another problem that could be relevant, is that we do not need which of the two modules is initialized first, in this case is not extremely important, because the function is never called in the constructor, but it could be in another project.<br></p><p>The best way to ensure this is to place a <b>Dependecy</b> :<br></p><img src="ee6.png" alt="" width="422" hspace="50" height="220"><br><br>This will <i>include</i> the <b>Semaphore</b><b>.h</b> into the <b>Pedestrian.c</b> body and make sure that <b>Semaphore</b> will be initialized before <b>Pedestrian</b>.<br><br><b>Note :</b> as previously mentioned, the initialization sequence uses a <b>DSF</b> algorithm modified to ignore the mutual dependencies. In case of mutual dependencies the initialization order will be random among the modules involved in each single loop.<br><br><h1>Run</h1><img src="ee7.png" alt="" width="400" hspace="30" height="296" align="left"><p><br>After the update and the restart of the <i>Arduino</i> hardware, the <b>Semaphore</b> runs normally, while the <b>Pedestrian</b> is <b>RED</b> . After connecting the <b>PIN 8</b> to ground and then releasing it, the <b>Pedestrian </b>begin its cycle turning green, blinking and then back to <b>RED</b>.<br></p><p><b>Semaphore</b> and <b>Pedestrian</b> are uncorrelated and run independently.<br><br></p><h1>
+  
+
+</h1></body></html>

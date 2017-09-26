@@ -203,17 +203,64 @@
     <br>
     <br>
     <br>
+    <h1>Code Preservation</h1>
     <br>
+    <div class="reference"> In this example, all the code is described
+      in the <i>Editing Dialog Boxes </i>and stored into the model.<br>
+      <br>
+      As we said, in&nbsp; <b>SunRiZe</b>, some part of the code can be
+      stored
+      outside the model, directly into the generated code, and this is
+      especially true for projects which can have a remarkable
+      consistency.<br>
+      <br>
+      In <b>SunRiZe</b> there are areas into the produced code that are
+      delimited, by special keys named <i>Code Preservation Keys</i>.
+      When a
+      file need to be rewritten/regenerated, due to the model changes,
+      all the
+      code contained between the <i>Code Preservation Keys</i> is
+      temporarily
+      stored in memory and reported when a key with the same tag is
+      inserted
+      into the code by the model.<br>
+      <br>
+      For example, we can consider the <b>Semaphore</b> constructor : </div>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-  </body>
-</html>
+    <pre style="color:#000000;background:#ffffff;"><span style="color:#800000; font-weight:bold; ">void</span> Semaphore_Init<span style="color:#808030; ">(</span><span style="color:#808030; ">)</span>
+<span style="color:#800080; ">{</span>
+TRACE_FUNCTION<span style="color:#808030; ">(</span>Semaphore<span style="color:#808030; ">,</span>Semaphore_Init<span style="color:#808030; ">)</span>
+<span style="color:#696969; ">/*@@+Init_definitions*/</span>
+<span style="color:#696969; ">/*@@-Init_definitions*/</span>
+<br>  ...<br><br><span style="color:#696969; ">/*@@+Init_code*/</span>
+<span style="color:#696969; ">/*@@-Init_code*/</span>
+<span style="color:#800080; ">}</span></pre><br>These tags :<br><pre style="color:#000000;background:#ffffff;"><span style="color:#696969; ">/*@@+<b><i>&lt;tag&gt;</i></b>*/</span>
+<span style="color:#696969; ">/*@@-</span><span style="color:#696969; "><span style="color:#696969; "><b><i>&lt;tag&gt;</i></b></span>*/</span>
+</pre>
+<br>
+<div class="reference">
+Are <i>Code Preservation Keys</i> , the <b>+</b> is the beginning and
+the <b>-</b> is the end of a <i>Code Preservation Block</i>.<br>
+<br>
+<b>Note :</b> These keys must be single rows. Sadly the early <b>C</b>
+standards do not allow the inline comments ( <b>//</b> ) . You must
+consider these keys as code separators and do not modify them in any
+way.<br>
+<br>
+Everything written in this blocks has to be considered "<i>Safe</i>" and
+when the code is rewritten, it is replaced in place of the related empty
+block.<br>
+<br>
+If a function is missed or something is changed and the related tag does
+not exists anymore, the dead code is placed at the end of the file,
+between the :</div><pre style="color:#000000;background:#ffffff;"><span style="color:#004a43; ">#if 0</span><span style="color:#696969; "></span>
+<span style="color:#004a43; ">#endif<br><br></span></pre><br><div class="reference"> rows, with the related <i>Code Preservation Keys</i> . That code has
+always considered dead by the compiler but the generator will continue
+to store the related<i> Keys</i> in memory, so that if the tag is
+reintroduced, the code will be placed again into the active code.</div><br>
+<br>
+
+    
+  
+
+</body></html>
