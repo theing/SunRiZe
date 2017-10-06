@@ -336,14 +336,6 @@ function generateAutoma( node )
               gc_use("resettimer_"+side0.id);
               gc_line("TIMER_RESET("+name+"_Timer)");
             }
-            else
-            {
-              gc_use("exitaction_"+ side0.id);
-              gc_line("TIMER_FOLLOW("+name+"_Timer,"+st.time+")");
-              gc_use(curKey+"_central");
-              gc_use("follower_reset_" + side0.id);              
-              gc_line("TIMER_RESET("+name+"_Timer)");
-            }
           }
         }      
       }   
@@ -357,8 +349,6 @@ function generateAutoma( node )
         gc_line("TRACE_STATE("+name+","+side1.schema.name+")"  );            
         gc_line(name+"_State = State_"+side1.schema.name+";");
       }
-      if ((st.event==1) && (!st.follower))
-        gc_kexp("follower_reset_" + side1.id)        
       gc_kexp("entryaction_" + side1.id)
     }    
   } 
@@ -534,7 +524,7 @@ function generateModule( data )
           error("An operation has the same name of an attribute "+na+" in "+ name );        
       }
       else
-        attopGuard[na]=True
+        attopGuard[na]=true
     }
      
     var op=ope.type+" "+ope.name;
