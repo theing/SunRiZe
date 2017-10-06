@@ -101,7 +101,7 @@
 
 <font color="#000000"><font color="#004a43">#define TIMER_DEFINITION</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">)</font><font color="#004a43"> unsigned long timer</font><font color="#808030">;</font></font>
 <font color="#000000"><font color="#004a43">#define TIMER_RESET</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">)</font><font color="#004a43"> timer</font><font color="#808030">=</font><font color="#004a43">time_ref</font><font color="#808030">();</font></font>
-<font color="#000000"><font color="#004a43">#define TIMER_FOLLOW</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">,</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#004a43"> timer</font><font color="#808030">+=</font><font color="#808030"> </font></font><font color="#000000"><font color="#808030"><font color="#000000"><font color="#808030">(</font><font color="#004a43">long</font><font color="#808030">) </font></font>(</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#808030">;</font></font>
+<font color="#000000"><font color="#004a43">#define TIMER_INCREASE</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">,</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#004a43"> timer</font><font color="#808030">+=</font><font color="#808030"> </font></font><font color="#000000"><font color="#808030"><font color="#000000"><font color="#808030">(</font><font color="#004a43">long</font><font color="#808030">) </font></font>(</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#808030">;</font></font>
 <font color="#000000"><font color="#004a43">#define TIMER_TIMEOUT</font><font color="#808030">(</font><font color="#004a43">timer</font><font color="#808030">,</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#004a43"> if</font><font color="#808030">((</font><font color="#004a43">long</font><font color="#808030">)</font><font color="#004a43">time_ref</font><font color="#808030">()-(</font><font color="#004a43">long</font><font color="#808030">)</font><font color="#004a43">timer</font><font color="#808030">&gt;=(</font><font color="#004a43">long</font><font color="#808030">)(</font><font color="#004a43">delay</font><font color="#808030">)</font><font color="#808030">)</font></font>
 
 <font color="#000000"><font color="#004a43">#define TOKEN_REFERENCE</font><font color="#808030">(</font><font color="#004a43">token</font><font color="#808030">)</font><font color="#004a43"> extern volatile unsigned token</font><font color="#808030">;</font></font>
@@ -209,21 +209,16 @@
       in the <i>Editing Dialog Boxes </i>and stored into the model.<br>
       <br>
       As we said, in&nbsp; <b>SunRiZe</b>, some part of the code can be
-      stored
-      outside the model, directly into the generated code, and this is
-      especially true for projects which can have a remarkable
+      stored outside the model, directly into the generated code, and
+      this is especially true for projects which can have a remarkable
       consistency.<br>
       <br>
       In <b>SunRiZe</b> there are areas into the produced code that are
       delimited, by special keys named <i>Code Preservation Keys</i>.
-      When a
-      file need to be rewritten/regenerated, due to the model changes,
-      all the
-      code contained between the <i>Code Preservation Keys</i> is
-      temporarily
-      stored in memory and reported when a key with the same tag is
-      inserted
-      into the code by the model.<br>
+      When a file need to be rewritten/regenerated, due to the model
+      changes, all the code contained between the <i>Code Preservation
+        Keys</i> is temporarily stored in memory and reported when a key
+      with the same tag is inserted into the code by the model.<br>
       <br>
       For example, we can consider the <b>Semaphore</b> constructor : </div>
     <br>
