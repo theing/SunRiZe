@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>10</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body>
+    <br>
+    <h1> Time followers</h1>
+    <h2>A Bug</h2>
+    <p>Let's go back to the previous example :<br>
+    </p>
+    <img src="ff6.png" alt="" width="483" hspace="50" height="304"
+      align="left">
+    <p>Then suppose we are in <b>YDir</b> waiting for Green on the
+      cross direction.<br>
+    </p>
+    <p>Just before the transition shooting, someone presses the
+      pedestrian button, and immediately the <b>Semaphore </b>enters
+      in <b>YDir2</b> and start to wait the same time <i>timeYD</i>
+      again.<br>
+    </p>
+    <p>This is wrong, because it results in a double yellow time.<br>
+    </p>
+    <p>We can better understand what happens, by looking at the produced
+      code. <br>
+    </p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <pre style="color:#000000;background:#ffffff;"><span style="color:#800000; font-weight:bold; ">   case </span><span style="color:#7d0045; ">State_GDir</span><span style="color:#e34adc; ">:</span>
+      <b><font size="+1">...</font></b> <span style="color:#800080; "></span>
+        TRACE_STATE<span style="color:#808030; ">(</span>Semaphore<span style="color:#808030; ">,</span>YDir<span style="color:#808030; ">)</span>
+        Semaphore_State <span style="color:#808030; ">=</span> State_YDir<span style="color:#800080; ">;</span>
+<b>        TIMER_RESET</b><b><span style="color:#808030; ">(</span></b><b>Semaphore_Timer</b><b><span style="color:#808030; ">)</span></b><b>
+</b>        <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span>
+      <span style="color:#800080; ">}</span>
+    <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span></pre>
+    <p>Due to the fact that there is a <b>Timed</b> transition exiting
+      from <b>GDir</b> the related code contains the <b>TIME_RESET</b>
+      command.</p>
+    <p>The same thing happens in <b>YDIR </b>because of the <i>timeYD</i>
+      transitions<i><b>.<br>
+        </b></i></p>
+    <p><br>
+    </p>
+    <pre style="color:#000000;background:#ffffff;"><span style="color:#800000; font-weight:bold; ">    case </span><span style="color:#7d0045; ">State_YDir</span><span style="color:#e34adc; ">:</span>
+      TIMER_TIMEOUT<span style="color:#808030; ">(</span>Semaphore_Timer<span style="color:#808030; ">,</span>timeYD<span style="color:#808030; ">)</span>
+      <span style="color:#800080; ">{</span>
+        <span style="color:#696969; ">/* Bit X X GD YD RD GC YC RC */</span>
+        PORTD<span style="color:#808030; ">=</span>B11001100<span style="color:#800080; ">;</span>
+        TRACE_STATE<span style="color:#808030; ">(</span>Semaphore<span style="color:#808030; ">,</span>GCross<span style="color:#808030; ">)</span>
+        Semaphore_State <span style="color:#808030; ">=</span> State_GCross<span style="color:#800080; ">;</span>
+        <b>TIMER_RESET</b><b><span style="color:#808030; ">(</span></b><b>Semaphore_Timer</b><b><span style="color:#808030; ">)</span></b>
+        <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span>
+      <span style="color:#800080; ">}</span>
+      TOKEN_CHECK<span style="color:#808030; ">(</span>Token_Booked<span style="color:#808030; ">)</span>
+      <span style="color:#800080; ">{</span>
+        TOKEN_USE_LIMIT<span style="color:#808030; ">(</span>Token_Booked<span style="color:#808030; ">,</span><span style="color:#008c00; ">1</span><span style="color:#808030; ">)</span>
+        TRACE_STATE<span style="color:#808030; ">(</span>Semaphore<span style="color:#808030; ">,</span>YDir2<span style="color:#808030; ">)</span>
+        Semaphore_State <span style="color:#808030; ">=</span> State_YDir2<span style="color:#800080; ">;</span>
+        <b>TIMER_RESET</b><b><span style="color:#808030; ">(</span></b><b>Semaphore_Timer</b><b><span style="color:#808030; ">)</span></b>
+        <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span>
+      <span style="color:#800080; ">}</span>
+    <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span>
+</pre>
+    <p><br>
+      Now let's see what happens in <b>YDir</b> if we check the <b>Time
+        follower</b> flag in <b>YDir2</b> :<br>
+    </p>
+    <p><i><b></b></i><br>
+      <img src="gg2.png" alt="" width="396" hspace="59" height="231"><br>
+    </p>
+    <p><br>
+    </p>
+    <pre style="color:#000000;background:#ffffff;"><span style="color:#800000; font-weight:bold; ">    case </span><span style="color:#7d0045; ">State_YDir</span><span style="color:#e34adc; ">:</span>
+      TIMER_TIMEOUT<span style="color:#808030; ">(</span>Semaphore_Timer<span style="color:#808030; ">,</span>timeYD<span style="color:#808030; ">)</span>
+      <span style="color:#800080; ">{</span>
+        <span style="color:#696969; ">/* Bit X X GD YD RD GC YC RC */</span>
+        PORTD<span style="color:#808030; ">=</span>B11001100<span style="color:#800080; ">;</span>
+        TRACE_STATE<span style="color:#808030; ">(</span>Semaphore<span style="color:#808030; ">,</span>GCross<span style="color:#808030; ">)</span>
+        Semaphore_State <span style="color:#808030; ">=</span> State_GCross<span style="color:#800080; ">;</span>
+<b>        TIMER_RESET</b><b><span style="color:#808030; ">(</span></b><b>Semaphore_Timer</b><b><span style="color:#808030; ">)</span></b><b>
+</b>        <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span>
+      <span style="color:#800080; ">}</span>
+      TOKEN_CHECK<span style="color:#808030; ">(</span>Token_Booked<span style="color:#808030; ">)</span>
+      <span style="color:#800080; ">{</span>
+        TOKEN_USE_LIMIT<span style="color:#808030; ">(</span>Token_Booked<span style="color:#808030; ">,</span><span style="color:#008c00; ">1</span><span style="color:#808030; ">)</span>
+        TRACE_STATE<span style="color:#808030; ">(</span>Semaphore<span style="color:#808030; ">,</span>YDir2<span style="color:#808030; ">)</span>
+        Semaphore_State <span style="color:#808030; ">=</span> State_YDir2<span style="color:#800080; ">;</span>
+        <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span>
+      <span style="color:#800080; ">}</span>
+    <span style="color:#800000; font-weight:bold; ">break</span><span style="color:#800080; ">;</span></pre>
+    <p> </p>
+    <br>
+    As you can see the <b>TIME_RESET</b> when booked is not called and
+    the timer is not reinitialized so, when the <b>Semaphore</b> falls
+    in <b>YDir2</b> it will continue to consume the programmed time
+    instead of reinitialize a new cycle.<br>
+    <br>
+    <h1>Advanced use of the Time Followers</h1>
+    <h2>The lost time problem</h2>
+    Another fair use of the <i>Time Followers</i>, is the recovery of
+    the time lost in transitions.<br>
+    <br>
+    In the Pedestrian semaphore for example, we have a counter to manage
+    <i>GOn</i> and <i>GOff</i>, that switches for seven times, with two
+    pauses of 500ms, so this time should be 7 seconds precisely.<br>
+    <br>
+    This is not true because the time is always a bit greater, and the
+    real problem is that it raises after each timed transition.<br>
+    <br>
+    This is not a problem for a semaphore, because we are talking of
+    milliseconds, but if we have to send for example a train of pulses,
+    of a precise length in a precise time slot :<br>
+    <br>
+    <br>
+    <img src="gg6.png" alt="" width="283" hspace="50" height="362"
+      align="left">For example we need to send 100 synchronized signals
+    of 100 ms each one in a 10 seconds time slot, the counter is reset
+    in the <b>Init State</b> .<br>
+    <br>
+    The picture below, shows you what happens with the module :<br>
+    <br>
+    <img src="gg3.gif" alt="" width="118" hspace="50" height="103"
+      align="left"><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    Suppose each square represents the time slot for a single state
+    advance. The time is checked in the main loop but when the time
+    expires, the loop might be involved in another module and it will
+    not recognized until the program reached the related check.<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    The average yielded time then, must be added to the time used to
+    travel the transition, and finally we have the real time passed,
+    that usually is some ms greater, for example 102 instead of 100.<br>
+    <br>
+    The problem is that at the next transition the wrong time becomes
+    the new base, the error will grow, and the train will lose the
+    synchronization.<br>
+    <br>
+    A different approach to the same problem is the following one :<br>
+    <br>
+    <img src="gg5.png" alt="" width="314" hspace="50" height="332"
+      align="left">Here, we have a starting state that performs the
+    first signals and increases the counter for the first time.<br>
+    <br>
+    The other time condition is a <b>Time follower</b> and it never
+    requires to reset the timer. The time limit is determined every time
+    as the product of counter*100 ms.<br>
+    <br>
+    We need to explicitly reset the time in the <b>Init State</b>
+    together with the counter by using the following code :<br>
+    <pre style="color:#000000;background:#ffffff;">counter<span style="color:#808030; ">=</span><span style="color:#008c00; ">0</span><span style="color:#800080; ">;</span>
+<b>TIMER_RESET</b><b><span style="color:#808030; ">(</span></b><b>Module_Timer</b><b><span style="color:#808030; ">)</span></b></pre>
+    This is as the resulting pulse train could appear as follows :<br>
+    <br>
+    <img src="gg4.gif" alt="" width="109" hspace="50" height="103"><br>
+    <br>
+    <br>
+    <br>
+    In this train, the previous error is corrected and the last error
+    only is involved, due to the fact that this is not a real time
+    approach.<br>
+    <br>
+    <h3>The 25 days limit</h3>
+    With this approach you can manage sequences for at most 25 days,
+    that is the limit, but what for example if you want to build a Wall
+    clock emitting a token every seconds, forever to increase the time
+    counter ?<br>
+    <br>
+    <img src="gg7.png" alt="" width="194" hspace="50" height="277"
+      align="left"><br>
+    <div class="reference"> By the way, welcome to the <i>Auto-Ring</i>
+      concept.</div>
+    <br>
+    In this case we always use the <b>Time follower</b> concept and the
+    explicit reset into the <b>Init State<i> </i></b>but we do not use
+    any counter.<br>
+    <br>
+    We use another macro instead called : <b>TIMER_INCREASE</b><b> </b>inside
+    the <b>Action </b>of the transition :<br>
+    <br>
+    <pre style="color:#000000;background:#ffffff;">TIMER_INCREASE<span style="color:#808030; ">(</span>Module_Timer<span style="color:#808030; ">,</span><span style="color:#008c00; ">1000</span><span style="color:#808030; ">)</span><span style="color:#800080; ">;</span><span style="color:#800080; "><br><br><br></span></pre><br><b>
+</b><br><br>
+<br>
+<img src="gg8.png" alt="" width="446" hspace="50" height="260" align="left">This macro does not reset the <i>Module_Timer</i> to the current time, but increases the old value by adding the same amount of time we are waiting.<br>
+<br>This approach has the same effect of the previous product by the counter, but it manages the overflow situations.<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  
+
+</body></html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>11</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body>
+    <br>
+    <h1>Debug and Time Tracing</h1>
+    <h2>Two Macros<br>
+    </h2>
+    If you look at the code produced by <b>SunRize</b>, you can see two
+    strange macro :<br>
+    <br>
+    <div class="code">TRACE_FUNCTION( function name , module name)</div>
+    <br>
+    and<br>
+    <br>
+    <div class="code">TRACE_STATE (state name, module name)</div>
+    <br>
+    <br>
+    These two macro, are inserted automatically as first row of a
+    function and just before any state change.<br>
+    <br>
+    Usually they are define in <b>defines.h</b> as well :<br>
+    <br>
+    <pre style="color:#000000;background:#ffffff;"><span style="color:#004a43; ">#</span><span style="color:#004a43; ">define</span><span style="color:#004a43; "> TRACE_STATE</span><span style="color:#808030; ">(</span><span style="color:#004a43; ">x</span><span style="color:#808030; ">,</span><span style="color:#004a43; ">y</span><span style="color:#808030; ">)</span>
+<span style="color:#004a43; ">#</span><span style="color:#004a43; ">define</span><span style="color:#004a43; "> TRACE_FUNCTION</span><span style="color:#808030; ">(</span><span style="color:#004a43; ">x</span><span style="color:#808030; ">,</span><span style="color:#004a43; ">y</span><span style="color:#808030; ">)</span></pre>
+    <br>
+    That means they do nothing, and the compiler ignores them.<br>
+    <br>
+    <br>
+    <h2>Changing the macros</h2>
+    <br>
+    <br>
+    Suppose to include a file named <b>debug.h</b> that contains the
+    following code :<br>
+    <br>
+    <pre style="color:#000000;background:#ffffff;"><span style="color:#004a43; ">#</span><span style="color:#004a43; ">undefine TRACE_STATE</span>
+<span style="color:#004a43; ">#</span><span style="color:#004a43; ">undefine TRACE_FUNCTION</span>
+<span style="color:#004a43; ">#</span><span style="color:#004a43; ">define</span><span style="color:#004a43; "> TRACE_STATE</span><span style="color:#808030; ">(</span><span style="color:#004a43; ">x</span><span style="color:#808030; ">,</span><span style="color:#004a43; ">y</span><span style="color:#808030; ">)</span><span style="color:#004a43; "> myStateTracer</span><span style="color:#808030; ">(</span><span style="color:#808030; ">#</span><span style="color:#004a43; ">x</span><span style="color:#808030; ">,</span><span style="color:#808030; ">#</span><span style="color:#004a43; ">y</span><span style="color:#808030; ">)</span><span style="color:#808030; ">;</span>
+<span style="color:#004a43; ">#</span><span style="color:#004a43; ">define</span><span style="color:#004a43; "> TRACE_FUNCTION</span><span style="color:#808030; ">(</span><span style="color:#004a43; ">x</span><span style="color:#808030; ">,</span><span style="color:#004a43; ">y</span><span style="color:#808030; ">)</span><span style="color:#004a43; "> myFunctionTracer</span><span style="color:#808030; ">(</span><span style="color:#808030; ">#</span><span style="color:#004a43; ">x</span><span style="color:#808030; ">,</span><span style="color:#808030; ">#</span><span style="color:#004a43; ">y</span><span style="color:#808030; ">)</span><span style="color:#808030; ">;</span></pre>
+    <br>
+    and suppose, <b>myStateTracer</b> and <b>myFunctionTracer</b> are
+    two (<i>buffered</i>) functions which send to a socket or a serial
+    port the name and for example the execution milliseconds.<br>
+    <br>
+    This feature gives you a powerful <i>debug</i> and <i>trace</i>
+    instrument that is also useful to establish the execution speed of
+    your software.<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
+</html>
