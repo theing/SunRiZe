@@ -14,8 +14,6 @@ set(PROJECT_PATH "${CMAKE_SOURCE_DIR}/SunRiZeModel")
 set(wxWidgets_CONFIGURATION mswu)
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 include(${wxWidgets_USE_FILE})
-find_package(PythonInterp) 
-find_package(PythonLibs) 
 #}}}}
 
 include_directories( . )

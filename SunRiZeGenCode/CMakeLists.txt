@@ -8,7 +8,7 @@ execute_process(
     COMMAND mkdir ${CMAKE_SOURCE_DIR}/bin 
 )
 execute_process(
-    COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZeGenCode/GenCode.pcg ${CMAKE_SOURCE_DIR}/bin 
+    COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZeGenCode/GenCode.js ${CMAKE_SOURCE_DIR}/bin 
 )
 execute_process(
     COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZe.ico ${CMAKE_SOURCE_DIR}/bin 

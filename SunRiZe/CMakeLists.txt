@@ -13,17 +13,12 @@ set(PROJECT_PATH "${CMAKE_SOURCE_DIR}")
 set(wxWidgets_CONFIGURATION mswu)
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 include(${wxWidgets_USE_FILE})
-find_package(PythonInterp) 
-find_package(PythonLibs) 
 #}}}}
 
 include_directories( . )
 
 
-add_definitions(-I ${PYTHON_INCLUDE_DIRS})
-add_definitions(-O3)
-add_definitions(-std=c++11)
-add_definitions(-Wall)
+add_definitions(-I ${CMAKE_SOURCE_DIR}/duktape/src)
 add_definitions(
     -DNDEBUG
     -D_FILE_OFFSET_BITS=64
@@ -33,7 +28,6 @@ add_definitions(
 
 
 # Linker options
-set(LINK_OPTIONS ${LINK_OPTIONS} ${PYTHON_LIBRARY})
 set(LINK_OPTIONS ${LINK_OPTIONS} -s)
 set(LINK_OPTIONS ${LINK_OPTIONS} -L../bin)
 set(LINK_OPTIONS ${LINK_OPTIONS} -lSunRiZeModel)
@@ -64,9 +58,18 @@ set ( CXX_SRCS
     ${CMAKE_SOURCE_DIR}/src/AboutBox.cpp
 )
 
+
+set ( C_SRCS
+    ${CMAKE_SOURCE_DIR}/duktape/src/duktape.c
+)
+
 set_source_files_properties(
     ${CXX_SRCS} PROPERTIES COMPILE_FLAGS 
     " -O3 -std=c++11 -Wall -pthread")
+
+set_source_files_properties(
+    ${C_SRCS} PROPERTIES COMPILE_FLAGS 
+    " -O3 -std=c99 -Wall -lm")
 
 if(WIN32)
     enable_language(RC)
