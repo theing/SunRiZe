@@ -50,7 +50,7 @@ class GPanel
   GContext * currentContext;  
   Point oldPoint;
 
-  class {
+  class History {
 
     List< Var > hist;
     List< Var > red;
