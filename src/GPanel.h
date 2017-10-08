@@ -50,6 +50,52 @@ class GPanel
   GContext * currentContext;  
   Point oldPoint;
 
+  class {
+
+    List< Var > hist;
+    List< Var > red;
+    Var temp;
+    static const List<Var>::size_type maxSize = 10;
+    
+  public:
+
+
+    void save(Var & val) {
+      temp = val;
+    }
+
+    Var load() {
+      if (hist.empty()) return Var();
+      red.push_back(temp);
+      Var res = hist.back();
+      hist.pop_back();
+      return res;
+    }
+
+    Var redo() {
+      if (red.empty()) return Var();
+      Var res = red.back();
+      red.pop_back();
+      return res;
+    }
+
+    void clear() {
+      hist.clear();
+      red.clear();
+    }
+
+    void commit() {
+      if (temp.isNull()) return;
+      if (!red.empty()) red.clear();
+      while (hist.size() >= maxSize) {
+        hist.pop_front();
+      }
+      hist.push_back(temp);
+      temp.null();
+    }
+
+  } history;
+
 public:
   virtual ~GPanel();
   /**
@@ -89,6 +135,11 @@ public:
    */
   void switchToPrimary();
   /**
+   * CopySelected clones the selected item if one and push it into the 
+   * toolbar in order to create a copy when the panel is clicked.
+   */
+  void copySelected();
+  /**
    * @brief Manages the mouse LEFT BUTTON down action
    * @param p the mouse pointer position
    */
@@ -114,6 +165,30 @@ public:
    */  
   void keyDown(int keycode);
 
+  /**
+  * Save full context history
+  */
+  void saveHistory();
+
+  /**
+  * Load full context history to current
+  */
+  void loadHistory();
+
+  /**
+  * Commit changes to history
+  */
+  void commitHistory();
+
+  /**
+  * Clear current history
+  */
+  void clearHistory();
+
+  /**
+  * Redo after loadHistory
+  */
+  void redoHistory();
 };
 
 #endif // GPANEL_H

@@ -34,14 +34,14 @@ public:
   virtual ~SState();
   virtual Point borderPoint(Point p);
   virtual bool toSelect(int x, int y);
-  virtual void edit();
+  virtual bool edit();
   virtual void draw(wxDC& deviceContext,bool isSelected);
   constexpr static const char * id="state";
   virtual const char * getId() const { return id; }
   virtual void sizeAdapter(Size & size) const;
   virtual bool autoRing(GJunction * j, Point &p1, Point &p2, Point &p3);
   virtual bool accept(GJunction * j, bool dirIn);
-
+  virtual Shared<GObject> clone() const;
 
 };
 

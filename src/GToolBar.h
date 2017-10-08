@@ -85,6 +85,11 @@ public:
    */
   Shared<GObject> & getSelection();
   /**
+   * Used to set the current selection in a copy
+   */
+  void setSelection(Shared<GObject> & obj);
+
+  /**
    * @brief Clears the selection graphically and by placing the shared to nullptr.
    */
   void clearSelection();

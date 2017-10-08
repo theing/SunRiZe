@@ -64,6 +64,7 @@ MyFrame1( parent ),toolBar(this,m_toolBar1),panel(m_panel2),selector(primaryList
   menuGenerate->Enable(menuGenerate->FindItem (wxT("Generate Code")),false);
   m_toolBar1->Enable(false);
   changed = false;
+  ctrlPressed = false;
 }
 
 void GFrame::toolClicked( wxCommandEvent& event )
@@ -78,11 +79,25 @@ void GFrame::refreshDraw()
 
 void GFrame::panelKeyDown(wxKeyEvent& event)
 {
-  panel.keyDown(event.GetKeyCode());
+  int kcode = event.GetKeyCode();
+  if (kcode == WXK_CONTROL) {
+    ctrlPressed = true;
+    return;
+  }
+  if (ctrlPressed) {
+    if ((kcode >= 'A') && (kcode <= 'Z'))
+      kcode -= 'A' - 1;
+  }
+  panel.keyDown(kcode);
 }
 
 void GFrame::panelKeyUp(wxKeyEvent& event)
 {
+  int kcode = event.GetKeyCode();
+  if (kcode == WXK_CONTROL) {
+    ctrlPressed = false;
+    return;
+  }
 }
 
 void GFrame::panelMouseEvent(wxMouseEvent& event)

@@ -43,7 +43,7 @@ GContext::~GContext()
 
 void GContext::addItem(Shared<GObject> & o)
 {
-  GFrame::getInstance().dataChanged();
+  //GFrame::getInstance().dataChanged();
 	content.push_back(o);
   selected=-1;
 }
@@ -69,44 +69,45 @@ void GContext::querySelection(int x, int y)
 bool GContext::moveObject(int i, int j)
 {    
     if (selected>=0) {
-        content[selected]->moveRel(i, j);
-        GFrame::getInstance().dataChanged();
-        return true;
+      content[selected]->moveRel(i, j);
+      //GFrame::getInstance().dataChanged();
+      return true;
 		}
 		return false;
-
 }
 
-void GContext::queryDoubleClick(int x, int y)
+bool GContext::queryDoubleClick(int x, int y)
 {
   selected=-1;
   for (int i=0; i<(int)content.size() ; ++i ) {
     if (content[i]->toSelect(x, y))
     {
-	    GFrame::getInstance().dataChanged();
-      content[i]->edit();
+	    //GFrame::getInstance().dataChanged();
+      if (content[i]->edit()) return true;
       break;
     }
   }
+  return false;
 }
 
-void GContext::keyBackspace()
+bool GContext::keyBackspace()
 {   
-		if (selected<0) return;
-    if (!(content[selected]->isJunction())) return ;
+		if (selected<0) return false;
+    if (!(content[selected]->isJunction())) return false;
     dynamic_cast<GJunction*>(content[selected].get())->removePoint(); 
-    GFrame::getInstance().dataChanged();
+    //GFrame::getInstance().dataChanged();
     selected=-1;
     GFrame::getInstance().refreshDraw();
+    return true;
 }
 
 
-void GContext::keyRemove()
+bool GContext::keyRemove()
 {
   if (MBox::yesno("Are you sure to delete this object ?"))
   {
-    if (selected<0) return;
-    if (!(content[selected]->isRemoveable())) return;
+    if (selected<0) return false;
+    if (!(content[selected]->isRemoveable())) return false;
     content.erase(content.begin()+selected);
     for (auto i=content.begin();i!=content.end();)
     {
@@ -120,11 +121,13 @@ void GContext::keyRemove()
       }
       ++i;
     }
-    GFrame::getInstance().dataChanged();
+    //GFrame::getInstance().dataChanged();
     GFrame::getSelector().refresh();    
+    return true;
   }
   selected=-1;  
   GFrame::getInstance().refreshDraw();
+  return false;
 }
 
 
@@ -150,7 +153,7 @@ Var GContext::collect(bool full)
 {
   // To ensure junctions are properly indexed
   // standalone must be collected before.
-  selected=-1;
+  //selected=-1;
   Var array;
   array.newArray();
   for (auto item:content)

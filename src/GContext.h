@@ -42,7 +42,9 @@
 
 class GContext
 {
+
   
+
   Vector< Shared<GObject> > content;
   int selected;
   unsigned toolbar;
@@ -138,9 +140,10 @@ public:
    * Check if the point belong to an object, it invokes the related edit function.
    * @param x point coordinate
    * @param y point coordinate
+   * @return true if something has changed
    */
   
-	void queryDoubleClick(int x, int y);
+	bool queryDoubleClick(int x, int y);
 
 	
   /**
@@ -155,14 +158,14 @@ public:
   /**
    * @brief manages the backspace key, that is the deletion of a JUNCTION breaking point.
    */
-	void keyBackspace();
+	bool keyBackspace();
 
 
   /**
    * @brief manages the removal of a standalone object or a junction. 
    * If a junction becomes invalid due to the absence of source or destination, it is removed too.
    */
-	void keyRemove();
+	bool keyRemove();
 	
   /**
    * @brief Checks if this is the main context

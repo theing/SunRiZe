@@ -81,8 +81,9 @@ public:
    * @brief Edits the current object when requested
    * This operations is connected to the double click,
    * and usually requires to build and show the dialog box to edit the specific object parameters.
+   * @return true if changed false otherwise
    */
-  virtual void edit() = 0;
+  virtual bool edit() = 0;
   /**
    * @brief Tells the caller if the object is a Junction
    * @return true if is a junction, false otherwise
@@ -159,6 +160,11 @@ public:
    */
   virtual void sizeAdapter(Size & size) const = 0;
   
+  /**
+   * clone returns by default and empty shared, or a copy of the object if implemented.
+   */
+  virtual Shared<GObject> clone() const;
+
 };
 
 #endif // GOBJECT_H

@@ -29,8 +29,8 @@
 
 #include "OSPorting.h"
 
-#define VERSION_STRING "0.2.170813"
-#define VERSION_NUMBER 3
+#define VERSION_STRING "0.3.171009"
+#define VERSION_NUMBER 4
 
 #include <stdint.h>
 #include <string>

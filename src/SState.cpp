@@ -70,12 +70,13 @@ if (
   return false;
 }
 
-void SState::edit()
+bool SState::edit()
 {
   StateDialogImplementation *sdi=new StateDialogImplementation(nullptr,content);
   int ret =sdi->ShowModal();
   if (ret==wxID_OK) content=sdi->getVar();
   delete sdi;
+  return (ret == wxID_OK);
 }
 
 void SState::draw(wxDC& deviceContext, bool isSelected)
@@ -117,4 +118,11 @@ bool SState::autoRing(GJunction * j, Point &p1, Point &p2, Point &p3)
 bool SState::accept(GJunction * j, bool dirIn)
 {
   return true;
+}
+
+Shared<GObject> SState::clone() const
+{
+  SState * obj = new SState();
+  obj->content = content;
+  return Shared<GObject>(obj);
 }

@@ -37,7 +37,7 @@ public:
 public:
   virtual Point borderPoint(Point p);
   virtual bool toSelect(int x, int y);
-  virtual void edit();
+  virtual bool edit();
   virtual void draw(wxDC& deviceContext,bool isSelected);
   virtual String getString();
   virtual void newContext();
@@ -46,7 +46,7 @@ public:
   virtual void sizeAdapter(Size & size) const;
   virtual bool autoRing(GJunction * j, Point &p1, Point &p2, Point &p3);
   virtual bool accept(GJunction * j, bool dirIn);
-
+  virtual Shared<GObject> clone() const;
 
 };
 

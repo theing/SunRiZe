@@ -32,8 +32,9 @@ SDependency::~SDependency()
 {
 }
 
-void SDependency::edit()
+bool SDependency::edit()
 {
+  return false;
 }
 
 void SDependency::draw(wxDC& deviceContext, bool isSelected)

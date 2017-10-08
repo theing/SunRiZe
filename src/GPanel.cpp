@@ -54,10 +54,11 @@ void GPanel::mouseDrag(Point& p)
 	if (currentContext->moveObject(p.x - oldPoint.x, p.y - oldPoint.y))
 	{
 		GFrame::getInstance().refreshDraw();
-		GFrame::getInstance().dataChanged();
+		//GFrame::getInstance().dataChanged();
+    commitHistory();
 	}
 	oldPoint = p;
-  }
+}
 
 void GPanel::mouseUp(Point& p)
 {
@@ -67,6 +68,7 @@ void GPanel::mouseUp(Point& p)
 
 void GPanel::mouseDown(Point& p)
 {
+  saveHistory();
   oldPoint=p;
   // The shared pointer is evaluated
   if (GFrame::getToolBar().getSelection()) 
@@ -81,7 +83,8 @@ void GPanel::mouseDown(Point& p)
         if (sel->isJunction()) return;
         bool toplace=dynamic_cast<GJunction*>(GFrame::getToolBar().getSelection().get())->setEnd(sel);        
         if (toplace) {
-          GFrame::getPanel().getCurrentContext().addItem(GFrame::getToolBar().getSelection());
+          commitHistory();
+          currentContext->addItem(GFrame::getToolBar().getSelection());
           GFrame::getToolBar().clearSelection();
           if (currentContext->isMainContext()) GFrame::getSelector().refresh();
         }
@@ -90,7 +93,8 @@ void GPanel::mouseDown(Point& p)
       else
       {
           dynamic_cast<GStandalone*>(GFrame::getToolBar().getSelection().get())->setPoint(p.x,p.y);
-          GFrame::getPanel().getCurrentContext().addItem(GFrame::getToolBar().getSelection());
+          commitHistory();
+          currentContext->addItem(GFrame::getToolBar().getSelection());
           GFrame::getToolBar().clearSelection();
           if (currentContext->isMainContext()) GFrame::getSelector().refresh();
           return;
@@ -99,19 +103,25 @@ void GPanel::mouseDown(Point& p)
   currentContext->querySelection(p.x,p.y);
   GFrame::getInstance().refreshDraw();
 }
+
 void GPanel::mouseDoubleClick(Point& p)
 {
-  currentContext->queryDoubleClick(p.x,p.y);
+  saveHistory();
+  if (currentContext->queryDoubleClick(p.x, p.y)) {
+    commitHistory();
+  }
   GFrame::getInstance().refreshDraw();
   if (currentContext->isMainContext()) GFrame::getSelector().refresh();
 }
 
+
 void GPanel::keyDown(int keycode)
 {
+  saveHistory();
   switch(keycode)
   {
     case WXK_BACK:
-      getCurrentContext().keyBackspace();
+      if (getCurrentContext().keyBackspace()) commitHistory();
       return;
     case WXK_INSERT :
     case WXK_NUMPAD_INSERT:
@@ -119,9 +129,19 @@ void GPanel::keyDown(int keycode)
       return;
     case WXK_DELETE :
     case WXK_NUMPAD_DELETE :
-      getCurrentContext().keyRemove();
+      if (getCurrentContext().keyRemove()) commitHistory();
       return;
-    return;
+    case WXK_CONTROL_Z:
+      loadHistory();
+      return;
+    case WXK_CONTROL_X:
+      redoHistory();
+      return;
+    case WXK_CONTROL_C:
+      copySelected();
+      return;
+    default:
+      return;
   
   }
   
@@ -132,10 +152,57 @@ void GPanel::switchToPrimary()
   Shared<GObject> item = currentContext->getSelection();
   if (!item) return;
   if (!item->isPrimary()) return;
+  clearHistory();
   GPrimary * primary=dynamic_cast<GPrimary*>(item.get());
   if (!primary->getContext()) primary->newContext();
   currentContext=primary->getContext();
   GFrame::getToolBar().setToolBox(1);
   GFrame::getInstance().refreshDraw();
   GFrame::getSelector().refresh();
+  GFrame::getToolBar().clearSelection();
+}
+
+void GPanel::copySelected()
+{
+  Shared<GObject> item = currentContext->getSelection();
+  if (!item) return;
+  Shared<GObject> clone = item->clone();
+  if (!clone) return;
+  GFrame::getToolBar().setSelection(clone);
+}
+
+
+void GPanel::saveHistory()
+{
+  Var cnt = currentContext->collect(true);
+  history.save(cnt);
+}
+
+void GPanel::loadHistory()
+{
+  Var cnt = history.load();
+  if (cnt.isNull()) return;
+  currentContext->loadCollection(cnt);
+  GFrame::getSelector().refresh();
+  GFrame::getInstance().refreshDraw();
+}
+
+void GPanel::commitHistory()
+{
+  history.commit();
+  GFrame::getInstance().dataChanged();
+}
+
+void GPanel::clearHistory()
+{
+  history.clear();
+}
+
+void GPanel::redoHistory()
+{
+  Var cnt = history.redo();
+  if (cnt.isNull()) return;
+  currentContext->loadCollection(cnt);
+  GFrame::getSelector().refresh();
+  GFrame::getInstance().refreshDraw();
 }

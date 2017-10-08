@@ -81,6 +81,12 @@ Shared<GObject> & GToolBar::getSelection()
   return selection;
 }
 
+void GToolBar::setSelection(Shared<GObject>& obj)
+{
+  clearSelection();
+  selection = obj;
+}
+
 
 void GToolBar::clearSelection()
 {

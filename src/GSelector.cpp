@@ -68,6 +68,7 @@ void GSelector::selected()
       GPrimary * primary=dynamic_cast<GPrimary *>((cont->content).lock().get());
       if (primary->getContext())
       {
+        GFrame::getPanel().clearHistory();
         GFrame::getPanel().setCurrentContext( *(primary->getContext()) );
         GFrame::getToolBar().setToolBox(1);
         GFrame::getInstance().refreshDraw();                
@@ -77,6 +78,7 @@ void GSelector::selected()
   else
   {
     // main
+    GFrame::getPanel().clearHistory();
     GFrame::getPanel().setCurrentContext(GFrame::getPanel().getMainContext());
     GFrame::getToolBar().setToolBox(0);
     GFrame::getInstance().refreshDraw();

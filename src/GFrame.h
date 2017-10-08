@@ -74,6 +74,7 @@ class GFrame : public MyFrame1
   static Factory * factory;
   String projectPath;
   GFrame( wxWindow* parent );  
+  bool ctrlPressed;
 
 protected:
   void toolClicked( wxCommandEvent& event );

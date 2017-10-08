@@ -57,8 +57,9 @@ bool SCondition::toSelect(int x, int y)
 		return false;
 }
 
-void SCondition::edit()
+bool SCondition::edit()
 {
+  return false;
 }
 
 void SCondition::draw(wxDC& deviceContext, bool isSelected)

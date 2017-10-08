@@ -43,6 +43,11 @@ int GObject::getIndexer() const
   return indexer;
 }
 
+Shared<GObject> GObject::clone() const
+{
+  return Shared<GObject>();
+}
+
 int GObject::setIndexer()
 {
   indexer=GFrame::getInstance().getIndexer();

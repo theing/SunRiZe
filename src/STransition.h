@@ -34,7 +34,7 @@ class STransition : public GJunction
 public:
   STransition();
   virtual ~STransition();
-  virtual void edit();
+  virtual bool edit();
   virtual void draw(wxDC& deviceContext,bool isSelected);
   constexpr static const char * id="transition";
   virtual const char * getId() const { return id; }

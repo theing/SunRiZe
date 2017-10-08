@@ -52,8 +52,9 @@ bool SInitState::toSelect(int x, int y)
   return false;	
 }
 
-void SInitState::edit()
+bool SInitState::edit()
 {
+  return false;
 }
 
 void SInitState::draw(wxDC& deviceContext, bool isSelected)

@@ -103,12 +103,13 @@ STransition::~STransition()
 {
 }
 
-void STransition::edit()
+bool STransition::edit()
 {
   TransitionDialogImplementation *tdi=new TransitionDialogImplementation(nullptr,content,source);
   int ret =tdi->ShowModal();
   if (ret==wxID_OK) content=tdi->getVar();
   delete tdi; 
+  return (ret == wxID_OK);
 }
 
 

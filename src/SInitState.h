@@ -35,7 +35,7 @@ public:
 public:
   virtual Point borderPoint(Point p);
   virtual bool toSelect(int x, int y);
-  virtual void edit();
+  virtual bool edit();
   virtual void draw(wxDC& deviceContext,bool isSelected);
   virtual bool isRemoveable() const ;
   constexpr static const char * id="initstate";

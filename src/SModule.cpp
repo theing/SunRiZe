@@ -168,12 +168,13 @@ void SModule::draw(wxDC& deviceContext, bool isSelected)
   } 
 }
 
-void SModule::edit()
+bool SModule::edit()
 {
   ModuleDialogImplementation *mdi=new ModuleDialogImplementation(nullptr,content);
   int ret =mdi->ShowModal();
   if (ret==wxID_OK) content=mdi->getVar();
   delete mdi;  
+  return (ret == wxID_OK);
 }
 
 String SModule::getString()
@@ -205,4 +206,12 @@ bool SModule::autoRing(GJunction * j, Point &p1, Point &p2, Point &p3)
 bool SModule::accept(GJunction * j, bool dirIn)
 {
   return true;
+}
+
+
+Shared<GObject> SModule::clone() const
+{
+  SModule * obj = new SModule();
+  obj->content = content;
+  return Shared<GObject>(obj);
 }

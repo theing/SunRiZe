@@ -30,7 +30,7 @@ class SDependency : public GJunction
 public:
   SDependency();
   virtual ~SDependency();
-  virtual void edit();
+  virtual bool edit();
   virtual void draw(wxDC& deviceContext,bool isSelected);
   constexpr static const char * id="dependency";
   virtual const char * getId() const { return id; }
