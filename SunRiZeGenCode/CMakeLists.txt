@@ -11,5 +11,5 @@ execute_process(
     COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZeGenCode/GenCode.js ${CMAKE_SOURCE_DIR}/bin 
 )
 execute_process(
-    COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZe.ico ${CMAKE_SOURCE_DIR}/bin 
+	COMMAND cp ${CMAKE_SOURCE_DIR}/SunRiZeGenCode/SunRiZe.png ${CMAKE_SOURCE_DIR}/bin 
 )

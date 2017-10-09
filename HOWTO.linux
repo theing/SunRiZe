@@ -27,7 +27,7 @@ Exec=/opt/SunRiZe/SunRiZe
 Type=Application
 Keywords=MDD;Tools;
 Terminal=False
-Icon=/opt/SunRiZe/icon.png
+Icon=/opt/SunRiZe/SunRiZe.png
 Categories=Development;Tools;
 EOF
 sudo cp SunRiZe.desktop /usr/share/applications
