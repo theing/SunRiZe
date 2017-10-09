@@ -8,6 +8,12 @@ then
   exit 1
 fi
 
+if [ ! -d "bin" ]
+then
+  echo "This script must be launched by the SunRiZe folder"
+  exit 1
+fi
+
 echo -n "Proceed ? (N/y) "
 read answ
 echo $answ
