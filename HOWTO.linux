@@ -1,5 +1,5 @@
 
-This is the sequence of required commands for Debian 9.0 Stretch, that is merely adaptable to major distributions :
+This is the sequence of required commands tested for Debian 9.0 Stretch, that is merely adaptable to major distributions :
 ---------------
 sudo apt-get install git cmake build-essential g++ libwxgtk3.0-dev
 git clone https://github.com/theing/SunRiZe.git
@@ -10,26 +10,6 @@ ln -s duktape-2.1.0 duktape
 cmake .
 make
 ---------------
-Everything you need is in bin :
-If you want to install it under opt for example you can do :
----------------
-sudo mkdir /opt/SunRiZe
-sudo install -m 644 bin/* /opt/SunRiZe
-sudo chmod 755 /opt/SunRiZe/SunRiZe
----------------
-And finally the menu entry :
----------------
-cat << EOF >SunRiZe.desktop
-[Desktop Entry]
-Name=SunRiZe
-GenericName=MCUs MDD
-Exec=/opt/SunRiZe/SunRiZe
-Type=Application
-Keywords=MDD;Tools;
-Terminal=False
-Icon=/opt/SunRiZe/SunRiZe.png
-Categories=Development;Tools;
-EOF
-sudo cp SunRiZe.desktop /usr/share/applications
----------------
-or your local own menu folder ~/.local/share/applications
+Everything you need is in bin.
+Run the LinuxInstall.sh bash script as root to install SunRiZe in /opt/SunRiZe or look at the script and make it by yourself.
+
