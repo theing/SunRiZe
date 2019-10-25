@@ -513,7 +513,7 @@ function generateModule( data )
     
     var ope=arg.operations[op];
     
-    if (att.visibility==1) 
+    if (ope.visibility==1) 
     {      
       var na=ope.name;
       if (attopGuard[na]!=undefined)
